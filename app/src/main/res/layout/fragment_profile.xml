@@ -1,14 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ProfileFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context=".Fragments.ProfileFragment"
+>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/profile_app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+    >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profile_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="4dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@android:color/white"
+        >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            >
+                <TextView
+                    android:id="@+id/profile_fragment_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="18dp"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:text="username"
+                />
 
-</FrameLayout>
+                <ImageView
+                    android:id="@+id/options_view"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/options"
+                />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_app_bar_layout"
+    >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+        >
+            <LinearLayout
+                android:id="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+            >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image_fragment"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/profile"
+                />
+
+                <LinearLayout
+                    android:layout_width="190dp"
+                    android:layout_height="90dp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginTop="15dp"
+                >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                    >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                        >
+                            <TextView
+                                android:id="@+id/total_posts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                android:text="0"
+                            />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"
+                                android:text="Posts"
+                            />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:layout_marginLeft="7dp"
+                        >
+                            <TextView
+                                android:id="@+id/total_followers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                android:text="0"
+                            />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"
+                                android:text="Followers"
+                            />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:layout_marginLeft="7dp"
+                        >
+                            <TextView
+                                android:id="@+id/total_following"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/black"
+                                android:text="0"
+                            />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12dp"
+                                android:textColor="@android:color/black"
+                                android:text="Following"
+                            />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <Button
+                        android:id="@+id/edit_profile_btn"
+                        android:layout_width="170dp"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:textAllCaps="false"
+                        android:text="Edit Profile"
+                        android:background="@drawable/buttons_background"
+                    />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/mid_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+            >
+                <TextView
+                    android:id="@+id/full_name_profile_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:text="Full name"
+                />
+
+                <TextView
+                    android:id="@+id/bio_profile_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13dp"
+                    android:textColor="@android:color/black"
+                    android:text="Bio"
+                />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/button_black_background"
+            >
+                <ImageButton
+                    android:id="@+id/images_grid_view_btn"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:src="@drawable/grid"
+                />
+
+                <ImageButton
+                    android:id="@+id/images_save_btn"
+                    android:layout_width="1dp"
+                    android:layout_height="49dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:src="@drawable/save_large_icon"
+                />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
