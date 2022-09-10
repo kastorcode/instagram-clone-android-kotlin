@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AccountSettingsActivity"
+>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/profile_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+    >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profile_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="4dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@android:color/white"
+        >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            >
+                <ImageView
+                    android:id="@+id/profile_close_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/close"
+                />
+
+                <ImageView
+                    android:id="@+id/profile_save_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/save_edited_info"
+                />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image_view"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/profile_app_bar_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/profile"
+    />
+
+    <TextView
+        android:id="@+id/profile_change_image_text_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_image_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="7.5dp"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:textColor="@color/colorPrimary"
+        android:text="Change Image"
+    />
+
+    <EditText
+        android:id="@+id/profile_full_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_change_image_text_btn"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:inputType="text"
+        android:hint="Full Name"
+    />
+
+    <EditText
+        android:id="@+id/profile_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_full_name"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:inputType="text"
+        android:hint="User Name"
+    />
+
+    <EditText
+        android:id="@+id/profile_bio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_user_name"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        android:inputType="text"
+        android:hint="Bio"
+    />
+
+    <Button
+        android:id="@+id/profile_logout_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/profile_delete_btn"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="15dp"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        android:background="@drawable/button_black_background"
+        android:textColor="@color/colorPrimary"
+        android:text="Logout"
+    />
+
+    <Button
+        android:id="@+id/profile_delete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="7.5dp"
+        android:layout_alignParentBottom="true"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:text="Delete Account"
+    />
+</RelativeLayout>
