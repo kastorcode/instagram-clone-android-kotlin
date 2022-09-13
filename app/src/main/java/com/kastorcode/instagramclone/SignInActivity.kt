@@ -3,15 +3,36 @@ package com.kastorcode.instagramclone
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 
 class SignInActivity : AppCompatActivity() {
 
+    override fun onStart () {
+        super.onStart()
+        redirectIfLogged()
+    }
+
+
     override fun onCreate (savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
+        setClickListeners()
+    }
 
+
+    private fun redirectIfLogged () {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            val intent = Intent(this@SignInActivity, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+
+    private fun setClickListeners () {
         signin_signup_btn.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
