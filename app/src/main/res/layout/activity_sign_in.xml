@@ -73,4 +73,37 @@
         android:background="@color/colorPrimary"
         android:text="Need new account? Sign up!"
     />
+
+    <RelativeLayout
+        android:id="@+id/signin_login_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B35c32c7"
+        android:visibility="invisible"
+    >
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_above="@+id/signin_login_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:padding="8dp"
+            android:indeterminateTint="@android:color/white"
+            android:background="@color/colorPrimary"
+        />
+
+        <TextView
+            android:id="@+id/signin_login_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="28dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:text="Trying to enter..."
+        />
+    </RelativeLayout>
 </RelativeLayout>
