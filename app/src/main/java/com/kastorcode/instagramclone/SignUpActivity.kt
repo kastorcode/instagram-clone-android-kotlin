@@ -33,8 +33,8 @@ class SignUpActivity : AppCompatActivity() {
     private fun createAccount () {
         fun getFields () : MutableMap<String, String> {
             return mutableMapOf(
-                "fullname" to signup_fullname.text.toString(),
-                "username" to signup_username.text.toString(),
+                "fullname" to signup_fullname.text.toString().lowercase(),
+                "username" to signup_username.text.toString().lowercase(),
                 "email" to signup_email.text.toString(),
                 "password" to signup_password.text.toString()
             )
