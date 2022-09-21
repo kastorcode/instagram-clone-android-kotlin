@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.kastorcode.instagramclone.Fragments.ProfileFragment
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.squareup.picasso.Picasso
@@ -37,21 +39,6 @@ class UserAdapter (
 
 
     override fun onBindViewHolder (holder : UserAdapter.ViewHolder, position : Int) {
-        fun checkFollowingStatus (uid : String, followButton : Button) {
-            followingRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (snapshot : DataSnapshot) {
-                    if (snapshot.child(uid).exists()) {
-                        followButton.text = "Following"
-                    }
-                    else {
-                        followButton.text = "Follow"
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
-        }
         fun followUser (user : User) {
             firebaseUser?.uid.let { it ->
                 followingRef.child(user.getUid()).setValue(true)
@@ -96,20 +83,46 @@ class UserAdapter (
                     }
             }
         }
+        fun checkFollowingStatus (uid : String, followButton : Button) {
+            followingRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange (snapshot : DataSnapshot) {
+                    if (snapshot.child(uid).exists()) {
+                        followButton.text = "Following"
+                    }
+                    else {
+                        followButton.text = "Follow"
+                    }
+                }
+
+                override fun onCancelled (error : DatabaseError) {
+                }
+            })
+        }
+        fun setClickListeners (user : User) {
+            holder.itemView.setOnClickListener(View.OnClickListener {
+                val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                pref.putString("profileId", user.getUid())
+                pref.apply()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ProfileFragment()).commit()
+            })
+            holder.followButton.setOnClickListener {
+                if (holder.followButton.text.toString() == "Follow") {
+                    followUser(user)
+                }
+                else {
+                    unfollowUser(user)
+                }
+            }
+        }
+
         val user = mUser[position]
         Picasso.get().load(user.getImage())
             .placeholder(R.drawable.profile).into(holder.imageImageView)
         holder.userNameTextView.text = user.getUserName()
         holder.fullNameTextView.text = user.getFullName()
         checkFollowingStatus(user.getUid(), holder.followButton)
-        holder.followButton.setOnClickListener {
-            if (holder.followButton.text.toString() == "Follow") {
-                followUser(user)
-            }
-            else {
-                unfollowUser(user)
-            }
-        }
+        setClickListeners(user)
     }
 
 
