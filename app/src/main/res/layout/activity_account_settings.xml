@@ -39,8 +39,7 @@
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/save_edited_info"
-                />
+                    android:src="@drawable/save_edited_info" />
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -52,8 +51,7 @@
         android:layout_below="@+id/profile_app_bar_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:src="@drawable/profile"
-    />
+        android:src="@drawable/profile" />
 
     <TextView
         android:id="@+id/profile_change_image_text_btn"
@@ -75,8 +73,8 @@
         android:layout_below="@+id/profile_change_image_text_btn"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
-        android:inputType="text"
         android:hint="Full Name"
+        android:inputType="text"
     />
 
     <EditText
@@ -86,8 +84,8 @@
         android:layout_below="@+id/profile_full_name"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
-        android:inputType="text"
         android:hint="User Name"
+        android:inputType="text"
     />
 
     <EditText

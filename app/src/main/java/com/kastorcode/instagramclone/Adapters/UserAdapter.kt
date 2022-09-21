@@ -15,6 +15,8 @@ import com.google.firebase.database.*
 import com.kastorcode.instagramclone.Fragments.ProfileFragment
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.Services.followUser
+import com.kastorcode.instagramclone.Services.unfollowUser
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -39,50 +41,6 @@ class UserAdapter (
 
 
     override fun onBindViewHolder (holder : UserAdapter.ViewHolder, position : Int) {
-        fun followUser (user : User) {
-            firebaseUser?.uid.let { it ->
-                followingRef.child(user.getUid()).setValue(true)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            firebaseUser?.uid.let { it ->
-                                FirebaseDatabase.getInstance().reference.child("Follow")
-                                    .child(user.getUid()).child("Followers")
-                                    .child(it.toString()).setValue(true)
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                        }
-                                        else {
-                                        }
-                                    }
-                            }
-                        }
-                        else {
-                        }
-                    }
-            }
-        }
-        fun unfollowUser (user : User) {
-            firebaseUser?.uid.let { it ->
-                followingRef.child(user.getUid()).removeValue()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            firebaseUser?.uid.let { it ->
-                                FirebaseDatabase.getInstance().reference.child("Follow")
-                                    .child(user.getUid()).child("Followers")
-                                    .child(it.toString()).removeValue()
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                        }
-                                        else {
-                                        }
-                                    }
-                            }
-                        }
-                        else {
-                        }
-                    }
-            }
-        }
         fun checkFollowingStatus (uid : String, followButton : Button) {
             followingRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange (snapshot : DataSnapshot) {
@@ -108,10 +66,10 @@ class UserAdapter (
             })
             holder.followButton.setOnClickListener {
                 if (holder.followButton.text.toString() == "Follow") {
-                    followUser(user)
+                    followUser(user.getUid())
                 }
                 else {
-                    unfollowUser(user)
+                    unfollowUser(user.getUid())
                 }
             }
         }

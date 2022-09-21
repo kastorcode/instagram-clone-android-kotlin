@@ -12,8 +12,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.kastorcode.instagramclone.AccountSettingsActivity
 import com.kastorcode.instagramclone.Models.User
-
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.Services.followUser
+import com.kastorcode.instagramclone.Services.unfollowUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -31,7 +32,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView (
         inflater : LayoutInflater, container : ViewGroup?,
         savedInstanceState : Bundle?
-    ) : View? {
+    ) : View {
         setProps(inflater, container)
         setGuiComponents()
         setClickListeners()
@@ -92,7 +93,7 @@ class ProfileFragment : Fragment() {
                     })
                 }
             }
-            if (profileId == firebaseUser?.uid) {
+            if (profileId == firebaseUser.uid) {
                 fragmentProfileView.edit_profile_btn.text = "Edit Profile"
             }
             else {
@@ -124,11 +125,11 @@ class ProfileFragment : Fragment() {
             })
         }
         fun setUserInfo () {
-            FirebaseDatabase.getInstance().getReference().child("Users")
+            FirebaseDatabase.getInstance().reference.child("Users")
                 .child(profileId).addValueEventListener(object : ValueEventListener {
                     override fun onDataChange (snapshot : DataSnapshot) {
                         if (snapshot.exists()) {
-                            val user = snapshot.getValue<User>(User::class.java)
+                            val user = snapshot.getValue(User::class.java)
                             Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
                                 .into(fragmentProfileView.profile_image_fragment)
                             fragmentProfileView.profile_fragment_username.text = user.getUserName()
@@ -149,15 +150,23 @@ class ProfileFragment : Fragment() {
 
 
     private fun setClickListeners () {
+        fun handleEditProfileBtnClick () {
+            when (fragmentProfileView.edit_profile_btn.text) {
+                "Edit Profile" -> startActivity(Intent(
+                    context, AccountSettingsActivity::class.java))
+                "Follow" -> followUser(profileId)
+                "Following" -> unfollowUser(profileId)
+            }
+        }
         fragmentProfileView.edit_profile_btn.setOnClickListener {
-            startActivity(Intent(context, AccountSettingsActivity::class.java))
+            handleEditProfileBtnClick()
         }
     }
 
 
     private fun setProfileIdToCurrentUser () {
         val pref = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)?.edit()
-        pref?.putString("profileId", firebaseUser?.uid)
+        pref?.putString("profileId", firebaseUser.uid)
         pref?.apply()
     }
 }
