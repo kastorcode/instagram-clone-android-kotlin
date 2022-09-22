@@ -60,10 +60,10 @@
         android:layout_below="@+id/profile_image_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7.5dp"
-        android:textStyle="bold"
-        android:textSize="16dp"
-        android:textColor="@color/colorPrimary"
         android:text="Change Image"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16dp"
+        android:textStyle="bold"
     />
 
     <EditText
@@ -126,4 +126,37 @@
         android:textColor="@android:color/white"
         android:text="Delete Account"
     />
+
+    <RelativeLayout
+        android:id="@+id/profile_updating_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B35C32C7"
+        android:visibility="invisible"
+    >
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_above="@+id/profile_updating_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:padding="8dp"
+            android:indeterminateTint="@android:color/white"
+            android:background="@color/colorPrimary"
+        />
+
+        <TextView
+            android:id="@+id/profile_updating_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="28dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:text="Updating..."
+        />
+    </RelativeLayout>
 </RelativeLayout>
