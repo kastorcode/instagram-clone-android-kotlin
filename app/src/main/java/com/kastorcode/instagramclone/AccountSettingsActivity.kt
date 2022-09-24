@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -107,7 +106,7 @@ class AccountSettingsActivity : AppCompatActivity() {
                             return@Continuation fileRef.downloadUrl
                         }
                         throw task.exception!!
-                    }).addOnCompleteListener(OnCompleteListener<Uri?> { task ->
+                    }).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val fields : Map<String, String> = mapOf(
                                 "image" to task.result.toString()
@@ -126,7 +125,7 @@ class AccountSettingsActivity : AppCompatActivity() {
                         else {
                             hadExceptionRaised(task.exception.toString())
                         }
-                    })
+                    }
             }
             fun sendUserInfo () {
                 var fields : Map<String, String> = mapOf(

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPostActivity"
+>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/add_post_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+    >
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_post_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginVertical="4dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@android:color/white"
+        >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            >
+                <ImageView
+                    android:id="@+id/add_post_close_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/close"
+                />
+
+                <ImageView
+                    android:id="@+id/add_post_save_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/save_edited_info"
+                />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_post_app_bar_layout"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+    >
+        <ImageView
+            android:id="@+id/add_post_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/add_image_icon"
+        />
+
+        <EditText
+            android:id="@+id/add_post_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:maxLines="6"
+            android:hint="say something"
+        />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/add_post_adding_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B3000000"
+        android:visibility="invisible"
+    >
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_above="@+id/add_post_adding_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:padding="8dp"
+            android:indeterminateTint="@android:color/white"
+            android:background="#000000"
+        />
+
+        <TextView
+            android:id="@+id/add_post_adding_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="28dp"
+            android:background="#000000"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:text="adding new post"
+        />
+    </RelativeLayout>
+</RelativeLayout>
