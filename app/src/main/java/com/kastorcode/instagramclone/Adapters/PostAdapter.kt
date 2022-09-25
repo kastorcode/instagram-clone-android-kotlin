@@ -37,7 +37,7 @@ class PostAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        fun getPublisherInfo (publisher : String, holder : ViewHolder) {
+        fun getPublisherInfo (publisher : String) {
             FirebaseDatabase.getInstance().reference.child("Users").child(publisher)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange (snapshot : DataSnapshot) {
@@ -52,9 +52,65 @@ class PostAdapter (
                     override fun onCancelled (error : DatabaseError) {}
                 })
         }
+        fun isPostLike (postId : String) {
+            FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.child(firebaseUser!!.uid).exists()) {
+                            holder.postLikeBtn.setImageResource(R.drawable.heart_clicked)
+                            holder.postLikeBtn.tag = "Liked"
+                        }
+                        else {
+                            holder.postLikeBtn.setImageResource(R.drawable.heart_not_clicked)
+                            holder.postLikeBtn.tag = "Like"
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
+        fun getPostLikes (postId : String) {
+            FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            holder.postLikes.text = dataSnapshot.childrenCount.toString() + " likes"
+                        }
+                        else {
+                            holder.postLikes.text = "0 likes"
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
+        fun setClickListeners (postId : String) {
+            fun likePost () {
+                FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                    .child(firebaseUser!!.uid).setValue(true)
+            }
+            fun unLikePost () {
+                FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                    .child(firebaseUser!!.uid).removeValue()
+            }
+            holder.postLikeBtn.setOnClickListener {
+                if (holder.postLikeBtn.tag == "Like") {
+                    likePost()
+                }
+                else {
+                    unLikePost()
+                }
+            }
+        }
         val post = mPost[position]
         Picasso.get().load(post.getPostImage()).into(holder.postImageView)
-        getPublisherInfo(post.getPublisher(), holder)
+        holder.postDescription.text = post.getDescription()
+        getPublisherInfo(post.getPublisher())
+        isPostLike(post.getPostId())
+        getPostLikes(post.getPostId())
+        setClickListeners(post.getPostId())
     }
 
 
