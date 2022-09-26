@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginHorizontal="4dp"
+>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/comments_profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/profile"
+        android:padding="5dp"
+    />
+
+    <LinearLayout
+        android:id="@+id/comments_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="50dp"
+    >
+        <TextView
+            android:id="@+id/comments_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="username"
+        />
+
+        <TextView
+            android:id="@+id/comments_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="comment"
+        />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
