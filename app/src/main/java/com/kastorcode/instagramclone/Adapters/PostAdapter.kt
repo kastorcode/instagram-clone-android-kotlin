@@ -1,6 +1,7 @@
 package com.kastorcode.instagramclone.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
+import com.kastorcode.instagramclone.PostCommentsActivity
 import com.kastorcode.instagramclone.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -75,7 +77,7 @@ class PostAdapter (
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange (dataSnapshot : DataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            holder.postLikes.text = dataSnapshot.childrenCount.toString() + " likes"
+                            holder.postLikes.text = "${dataSnapshot.childrenCount} likes"
                         }
                         else {
                             holder.postLikes.text = "0 likes"
@@ -86,7 +88,23 @@ class PostAdapter (
                     }
                 })
         }
-        fun setClickListeners (postId : String) {
+        fun getPostComments (postId : String) {
+            FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            holder.postComments.text = "${dataSnapshot.childrenCount} comments"
+                        }
+                        else {
+                            holder.postComments.text = "0 comments"
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
+        fun setClickListeners (postId : String, publisher : String) {
             fun likePost () {
                 FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
                     .child(firebaseUser!!.uid).setValue(true)
@@ -103,6 +121,12 @@ class PostAdapter (
                     unLikePost()
                 }
             }
+            holder.postCommentBtn.setOnClickListener {
+                val intent = Intent(mContext, PostCommentsActivity::class.java)
+                intent.putExtra("postId", postId)
+                intent.putExtra("publisher", publisher)
+                mContext.startActivity(intent)
+            }
         }
         val post = mPost[position]
         Picasso.get().load(post.getPostImage()).into(holder.postImageView)
@@ -110,7 +134,8 @@ class PostAdapter (
         getPublisherInfo(post.getPublisher())
         isPostLike(post.getPostId())
         getPostLikes(post.getPostId())
-        setClickListeners(post.getPostId())
+        getPostComments(post.getPostId())
+        setClickListeners(post.getPostId(), post.getPublisher())
     }
 
 
