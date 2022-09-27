@@ -26,7 +26,7 @@
             >
 
                 <TextView
-                    android:id="@+id/profile_fragment_username"
+                    android:id="@+id/profile_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -37,7 +37,7 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/options_view"
+                    android:id="@+id/profile_options"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -49,26 +49,26 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+    <RelativeLayout
+        android:id="@+id/profile_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/profile_app_bar_layout"
     >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
         >
             <LinearLayout
-                android:id="@+id/top_bar"
+                android:id="@+id/profile_top_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="16dp"
             >
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image_fragment"
+                    android:id="@+id/profile_image"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/profile"
@@ -94,7 +94,7 @@
                             android:gravity="center"
                         >
                             <TextView
-                                android:id="@+id/total_posts"
+                                android:id="@+id/profile_total_posts"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="12dp"
@@ -120,7 +120,7 @@
                             android:layout_marginLeft="7dp"
                         >
                             <TextView
-                                android:id="@+id/total_followers"
+                                android:id="@+id/profile_total_followers"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="12dp"
@@ -146,7 +146,7 @@
                             android:layout_marginLeft="7dp"
                         >
                             <TextView
-                                android:id="@+id/total_following"
+                                android:id="@+id/profile_total_following"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="12dp"
@@ -167,7 +167,7 @@
 
 
                     <Button
-                        android:id="@+id/edit_profile_btn"
+                        android:id="@+id/profile_edit_btn"
                         android:layout_width="170dp"
                         android:layout_height="32dp"
                         android:layout_marginTop="2dp"
@@ -181,14 +181,14 @@
 
 
             <LinearLayout
-                android:id="@+id/mid_bar"
+                android:id="@+id/profile_mid_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="12dp"
             >
                 <TextView
-                    android:id="@+id/full_name_profile_fragment"
+                    android:id="@+id/profile_fullname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -198,7 +198,7 @@
                 />
 
                 <TextView
-                    android:id="@+id/bio_profile_fragment"
+                    android:id="@+id/profile_bio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
@@ -217,7 +217,7 @@
                 android:background="@drawable/button_black_background"
             >
                 <ImageButton
-                    android:id="@+id/images_grid_view_btn"
+                    android:id="@+id/profile_grid_view_btn"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -226,7 +226,7 @@
                 />
 
                 <ImageButton
-                    android:id="@+id/images_save_btn"
+                    android:id="@+id/profile_save_btn"
                     android:layout_width="1dp"
                     android:layout_height="49dp"
                     android:layout_weight="1"
@@ -235,6 +235,19 @@
                     android:src="@drawable/save_large_icon"
                 />
             </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_uploaded_images"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+            />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profile_saved_images"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+            />
         </LinearLayout>
-    </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>
