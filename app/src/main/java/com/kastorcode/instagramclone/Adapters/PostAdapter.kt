@@ -24,8 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 
 class PostAdapter (
-    private val mContext : Context, private val mPost : List<Post>,
-    private val isFragment : Boolean = false
+    private val mContext : Context, private val mPost : List<Post>
 ) : RecyclerView.Adapter<PostAdapter.ViewHolder>() {
 
     private val firebaseUser : FirebaseUser? = FirebaseAuth.getInstance().currentUser
@@ -54,7 +53,7 @@ class PostAdapter (
                     override fun onCancelled (error : DatabaseError) {}
                 })
         }
-        fun isPostLike (postId : String) {
+        fun isPostLiked (postId : String) {
             FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange (dataSnapshot : DataSnapshot) {
@@ -65,6 +64,24 @@ class PostAdapter (
                         else {
                             holder.postLikeBtn.setImageResource(R.drawable.heart_not_clicked)
                             holder.postLikeBtn.tag = "Like"
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
+        fun isPostSaved (postId : String) {
+            FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser!!.uid)
+                .child(postId).addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            holder.postsSaveBtn.setImageResource(R.drawable.save_large_icon)
+                            holder.postsSaveBtn.tag = "Saved"
+                        }
+                        else {
+                            holder.postsSaveBtn.setImageResource(R.drawable.save_unfilled_large_icon)
+                            holder.postsSaveBtn.tag = "Save"
                         }
                     }
 
@@ -106,20 +123,27 @@ class PostAdapter (
         }
         fun setClickListeners (postId : String, publisher : String) {
             fun likePost () {
-                FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
-                    .child(firebaseUser!!.uid).setValue(true)
-            }
-            fun unLikePost () {
-                FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
-                    .child(firebaseUser!!.uid).removeValue()
-            }
-            holder.postLikeBtn.setOnClickListener {
                 if (holder.postLikeBtn.tag == "Like") {
-                    likePost()
+                    FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                        .child(firebaseUser!!.uid).setValue(true)
                 }
                 else {
-                    unLikePost()
+                    FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
+                        .child(firebaseUser!!.uid).removeValue()
                 }
+            }
+            fun savePost () {
+                if (holder.postsSaveBtn.tag == "Save") {
+                    FirebaseDatabase.getInstance().reference.child("Saves")
+                        .child(firebaseUser!!.uid).child(postId).setValue(true)
+                }
+                else {
+                    FirebaseDatabase.getInstance().reference.child("Saves")
+                        .child(firebaseUser!!.uid).child(postId).removeValue()
+                }
+            }
+            holder.postLikeBtn.setOnClickListener {
+                likePost()
             }
             holder.postCommentBtn.setOnClickListener {
                 val intent = Intent(mContext, PostCommentsActivity::class.java)
@@ -127,12 +151,16 @@ class PostAdapter (
                 intent.putExtra("publisher", publisher)
                 mContext.startActivity(intent)
             }
+            holder.postsSaveBtn.setOnClickListener {
+                savePost()
+            }
         }
         val post = mPost[position]
         Picasso.get().load(post.getPostImage()).into(holder.postImageView)
         holder.postDescription.text = post.getDescription()
         getPublisherInfo(post.getPublisher())
-        isPostLike(post.getPostId())
+        isPostLiked(post.getPostId())
+        isPostSaved(post.getPostId())
         getPostLikes(post.getPostId())
         getPostComments(post.getPostId())
         setClickListeners(post.getPostId(), post.getPublisher())
@@ -149,7 +177,7 @@ class PostAdapter (
         val postImageView : ImageView = itemView.findViewById(R.id.posts_image_view)
         val postLikeBtn : ImageView = itemView.findViewById(R.id.posts_like_btn)
         val postCommentBtn : ImageView = itemView.findViewById(R.id.posts_comment_btn)
-        val postSaveCommentBtn : ImageView = itemView.findViewById(R.id.posts_save_comment_btn)
+        val postsSaveBtn : ImageView = itemView.findViewById(R.id.posts_save_btn)
         val postUsername : TextView = itemView.findViewById(R.id.posts_username)
         val postLikes : TextView = itemView.findViewById(R.id.posts_likes)
         val postPublisher : TextView = itemView.findViewById(R.id.posts_publisher)

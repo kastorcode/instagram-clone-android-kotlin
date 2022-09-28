@@ -21,7 +21,6 @@ import com.kastorcode.instagramclone.Services.followUser
 import com.kastorcode.instagramclone.Services.unfollowUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -31,6 +30,7 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseUser : FirebaseUser
     private lateinit var userFollowingRef : DatabaseReference
     private lateinit var profileId : String
+    private lateinit var postsRef : DatabaseReference
     private lateinit var followersRef : DatabaseReference
     private lateinit var followingRef : DatabaseReference
     private lateinit var profileUploadedImages : RecyclerView
@@ -76,6 +76,7 @@ class ProfileFragment : Fragment() {
         val pref = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
         if (pref != null) {
             profileId = pref.getString("profileId", "none").toString()
+            postsRef = FirebaseDatabase.getInstance().reference.child("Posts")
             followersRef = FirebaseDatabase.getInstance().reference.child("Follow")
                 .child(profileId).child("Followers")
             followingRef = FirebaseDatabase.getInstance().reference.child("Follow")
@@ -116,6 +117,24 @@ class ProfileFragment : Fragment() {
             else {
                 checkFollowOrFollowingButtonStatus()
             }
+        }
+        fun setPosts () {
+            postsRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange (dataSnapshot : DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        var posts = 0
+                        for (snapshot in dataSnapshot.children) {
+                            if (snapshot.getValue(Post::class.java)?.getPublisher() == profileId) {
+                                posts++
+                            }
+                        }
+                        fragmentProfileView.profile_total_posts.text = posts.toString()
+                    }
+                }
+
+                override fun onCancelled (error : DatabaseError) {
+                }
+            })
         }
         fun setFollowers () {
             followersRef.addValueEventListener(object : ValueEventListener {
@@ -160,6 +179,7 @@ class ProfileFragment : Fragment() {
             })
         }
         setEditProfileBtn()
+        setPosts()
         setFollowers()
         setFollowing()
         setUserInfo()
