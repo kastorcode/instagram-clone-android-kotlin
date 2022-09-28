@@ -13,12 +13,14 @@
         <entry key="app/src/main/res/drawable/inputs_background.xml" value="0.1615" />
         <entry key="app/src/main/res/layout/activity_account_settings.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_post_comments.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/comments_item_layout.xml" value="1.0" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_post_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.2" />
         <entry key="app/src/main/res/layout/my_images_item_layout.xml" value="0.2" />

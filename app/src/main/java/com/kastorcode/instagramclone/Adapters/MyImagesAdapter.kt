@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.NonNull
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.kastorcode.instagramclone.Fragments.PostDetailsFragment
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.R
 import com.squareup.picasso.Picasso
@@ -24,7 +26,17 @@ class MyImagesAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        Picasso.get().load(mPosts[position].getPostImage()).into(holder.myImagesImage)
+        fun setClickListeners (post : Post) {
+            holder.myImagesImage.setOnClickListener {
+                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                    .putString("postId", post.getPostId()).apply()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PostDetailsFragment()).commit()
+            }
+        }
+        val post = mPosts[position]
+        Picasso.get().load(post.getPostImage()).into(holder.myImagesImage)
+        setClickListeners(post)
     }
 
 
