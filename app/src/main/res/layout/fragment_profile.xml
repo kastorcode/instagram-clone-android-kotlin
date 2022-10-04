@@ -217,7 +217,7 @@
                 android:background="@drawable/button_black_background"
             >
                 <ImageButton
-                    android:id="@+id/profile_grid_view_btn"
+                    android:id="@+id/profile_uploaded_images_btn"
                     android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -226,7 +226,7 @@
                 />
 
                 <ImageButton
-                    android:id="@+id/profile_save_btn"
+                    android:id="@+id/profile_saved_images_btn"
                     android:layout_width="1dp"
                     android:layout_height="49dp"
                     android:layout_weight="1"
@@ -240,6 +240,7 @@
                 android:id="@+id/profile_uploaded_images"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
             />
 
             <androidx.recyclerview.widget.RecyclerView

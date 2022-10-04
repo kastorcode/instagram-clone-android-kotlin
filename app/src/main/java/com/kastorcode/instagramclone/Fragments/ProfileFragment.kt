@@ -36,6 +36,10 @@ class ProfileFragment : Fragment() {
     private lateinit var profileUploadedImages : RecyclerView
     private lateinit var postList : MutableList<Post>
     private lateinit var myImagesAdapter : MyImagesAdapter
+    private lateinit var profileSavedImages : RecyclerView
+    private lateinit var mySavedImages : MutableList<String>
+    private lateinit var savedPostList : MutableList<Post>
+    private lateinit var mySavedImagesAdapter : MyImagesAdapter
 
 
     override fun onCreateView (
@@ -45,7 +49,9 @@ class ProfileFragment : Fragment() {
         setProps(inflater, container)
         setGuiComponents()
         getUploadedImages()
+        getSavedImages()
         setClickListeners()
+        showUploadedImages()
         return fragmentProfileView
     }
 
@@ -69,26 +75,46 @@ class ProfileFragment : Fragment() {
 
 
     private fun setProps (inflater : LayoutInflater, container : ViewGroup?) {
-        fragmentProfileView = inflater.inflate(R.layout.fragment_profile, container, false)
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        userFollowingRef = FirebaseDatabase.getInstance().reference.child("Follow")
-            .child(firebaseUser.uid).child("Following")
-        val pref = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
-        if (pref != null) {
-            profileId = pref.getString("profileId", "none").toString()
-            postsRef = FirebaseDatabase.getInstance().reference.child("Posts")
-            followersRef = FirebaseDatabase.getInstance().reference.child("Follow")
-                .child(profileId).child("Followers")
-            followingRef = FirebaseDatabase.getInstance().reference.child("Follow")
-                .child(profileId).child("Following")
+        fun setSomeUserProps () {
+            fragmentProfileView = inflater.inflate(R.layout.fragment_profile, container, false)
+            firebaseUser = FirebaseAuth.getInstance().currentUser!!
+            userFollowingRef = FirebaseDatabase.getInstance().reference.child("Follow")
+                .child(firebaseUser.uid).child("Following")
         }
-        postList = ArrayList()
-        myImagesAdapter = context?.let { MyImagesAdapter(it, postList) }!!
-        val gridLayoutManager = GridLayoutManager(context, 3)
-        profileUploadedImages = fragmentProfileView.findViewById(R.id.profile_uploaded_images)
-        profileUploadedImages.setHasFixedSize(true)
-        profileUploadedImages.layoutManager = gridLayoutManager
-        profileUploadedImages.adapter = myImagesAdapter
+        fun setSomeRefs () {
+            val pref = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
+            if (pref != null) {
+                profileId = pref.getString("profileId", "none").toString()
+                postsRef = FirebaseDatabase.getInstance().reference.child("Posts")
+                followersRef = FirebaseDatabase.getInstance().reference.child("Follow")
+                    .child(profileId).child("Followers")
+                followingRef = FirebaseDatabase.getInstance().reference.child("Follow")
+                    .child(profileId).child("Following")
+            }
+        }
+        fun setUploadedImages () {
+            postList = ArrayList()
+            myImagesAdapter = context?.let { MyImagesAdapter(it, postList) }!!
+            val uploadedImagesLayoutManager = GridLayoutManager(context, 3)
+            profileUploadedImages = fragmentProfileView.findViewById(R.id.profile_uploaded_images)
+            profileUploadedImages.setHasFixedSize(true)
+            profileUploadedImages.layoutManager = uploadedImagesLayoutManager
+            profileUploadedImages.adapter = myImagesAdapter
+        }
+        fun setSavedImages () {
+            mySavedImages = ArrayList()
+            savedPostList = ArrayList()
+            mySavedImagesAdapter = context?.let { MyImagesAdapter(it, savedPostList) }!!
+            val savedImagesLayoutManager = GridLayoutManager(context, 3)
+            profileSavedImages = fragmentProfileView.findViewById(R.id.profile_saved_images)
+            profileSavedImages.setHasFixedSize(true)
+            profileSavedImages.layoutManager = savedImagesLayoutManager
+            profileSavedImages.adapter = mySavedImagesAdapter
+        }
+        setSomeUserProps()
+        setSomeRefs()
+        setUploadedImages()
+        setSavedImages()
     }
 
 
@@ -209,6 +235,45 @@ class ProfileFragment : Fragment() {
     }
 
 
+    private fun getSavedImages () {
+        fun readMySavedImages () {
+            postsRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange (dataSnapshot : DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        savedPostList.clear()
+                        for (snapshot in dataSnapshot.children) {
+                            val post = snapshot.getValue(Post::class.java)
+                            for (id in mySavedImages) {
+                                if (id == post?.getPostId()) {
+                                    savedPostList.add(post)
+                                }
+                            }
+                        }
+                        mySavedImagesAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                override fun onCancelled (error : DatabaseError) {
+                }
+            })
+        }
+        FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange (dataSnapshot : DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (snapshot in dataSnapshot.children) {
+                            (mySavedImages as ArrayList<String>).add(snapshot.key!!)
+                        }
+                        readMySavedImages()
+                    }
+                }
+
+                override fun onCancelled (error : DatabaseError) {
+                }
+            })
+    }
+
+
     private fun setClickListeners () {
         fun handleEditProfileBtnClick () {
             when (fragmentProfileView.profile_edit_btn.text) {
@@ -221,6 +286,24 @@ class ProfileFragment : Fragment() {
         fragmentProfileView.profile_edit_btn.setOnClickListener {
             handleEditProfileBtnClick()
         }
+        fragmentProfileView.profile_uploaded_images_btn.setOnClickListener {
+            showUploadedImages()
+        }
+        fragmentProfileView.profile_saved_images_btn.setOnClickListener {
+            showSavedImages()
+        }
+    }
+
+
+    private fun showUploadedImages () {
+        fragmentProfileView.profile_saved_images.visibility = View.GONE
+        fragmentProfileView.profile_uploaded_images.visibility = View.VISIBLE
+    }
+
+
+    private fun showSavedImages () {
+        fragmentProfileView.profile_uploaded_images.visibility = View.GONE
+        fragmentProfileView.profile_saved_images.visibility = View.VISIBLE
     }
 
 
