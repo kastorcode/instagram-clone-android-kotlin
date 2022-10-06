@@ -19,6 +19,7 @@ import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.PostCommentsActivity
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -132,6 +133,11 @@ class PostAdapter (
                         .child(firebaseUser!!.uid).removeValue()
                 }
             }
+            fun goToPostCommentsActivity () {
+                val intent = Intent(mContext, PostCommentsActivity::class.java)
+                    .putExtra("postId", postId).putExtra("publisher", publisher)
+                mContext.startActivity(intent)
+            }
             fun savePost () {
                 if (holder.postsSaveBtn.tag == "Save") {
                     FirebaseDatabase.getInstance().reference.child("Saves")
@@ -142,17 +148,22 @@ class PostAdapter (
                         .child(firebaseUser!!.uid).child(postId).removeValue()
                 }
             }
+            fun goToShowUsersActivity () {
+                val intent = Intent(mContext, ShowUsersActivity::class.java)
+                    .putExtra("id", postId).putExtra("title", "Likes")
+                mContext.startActivity(intent)
+            }
             holder.postLikeBtn.setOnClickListener {
                 likePost()
             }
             holder.postCommentBtn.setOnClickListener {
-                val intent = Intent(mContext, PostCommentsActivity::class.java)
-                intent.putExtra("postId", postId)
-                intent.putExtra("publisher", publisher)
-                mContext.startActivity(intent)
+                goToPostCommentsActivity()
             }
             holder.postsSaveBtn.setOnClickListener {
                 savePost()
+            }
+            holder.postLikes.setOnClickListener {
+                goToShowUsersActivity()
             }
         }
         val post = mPost[position]

@@ -19,6 +19,7 @@ import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.Services.followUser
 import com.kastorcode.instagramclone.Services.unfollowUser
+import com.kastorcode.instagramclone.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlin.collections.ArrayList
@@ -282,6 +283,17 @@ class ProfileFragment : Fragment() {
                 "Follow" -> followUser(profileId)
                 "Following" -> unfollowUser(profileId)
             }
+        }
+        fun goToShowUsersActivity (title : String) {
+            val intent = Intent(context, ShowUsersActivity::class.java)
+                .putExtra("id", profileId).putExtra("title", title)
+            startActivity(intent)
+        }
+        fragmentProfileView.profile_total_followers.setOnClickListener {
+            goToShowUsersActivity("Followers")
+        }
+        fragmentProfileView.profile_total_following.setOnClickListener {
+            goToShowUsersActivity("Following")
         }
         fragmentProfileView.profile_edit_btn.setOnClickListener {
             handleEditProfileBtnClick()

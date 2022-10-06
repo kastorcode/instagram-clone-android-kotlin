@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ShowUsersActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostCommentsActivity"
             android:exported="false" />
         <activity
