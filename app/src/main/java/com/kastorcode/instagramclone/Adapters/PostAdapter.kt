@@ -39,6 +39,15 @@ class PostAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
+        fun addNotification (userId : String, postId : String) {
+            val notificationMap = HashMap<String, Any>()
+            notificationMap["userId"] = firebaseUser!!.uid
+            notificationMap["postId"] = postId
+            notificationMap["isPost"] = true
+            notificationMap["text"] = "liked your post"
+            FirebaseDatabase.getInstance().reference.child("Notifications")
+                .child(userId).push().setValue(notificationMap)
+        }
         fun getPublisherInfo (publisher : String) {
             FirebaseDatabase.getInstance().reference.child("Users").child(publisher)
                 .addValueEventListener(object : ValueEventListener {
@@ -127,6 +136,7 @@ class PostAdapter (
                 if (holder.postLikeBtn.tag == "Like") {
                     FirebaseDatabase.getInstance().reference.child("Likes").child(postId)
                         .child(firebaseUser!!.uid).setValue(true)
+                    addNotification(publisher, postId)
                 }
                 else {
                     FirebaseDatabase.getInstance().reference.child("Likes").child(postId)

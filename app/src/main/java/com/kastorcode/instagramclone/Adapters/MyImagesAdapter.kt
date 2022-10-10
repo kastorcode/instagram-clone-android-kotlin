@@ -26,12 +26,15 @@ class MyImagesAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
+        fun goToPostDetailsFragment (post : Post) {
+            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                .putString("postId", post.getPostId()).apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PostDetailsFragment()).commit()
+        }
         fun setClickListeners (post : Post) {
             holder.myImagesImage.setOnClickListener {
-                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                    .putString("postId", post.getPostId()).apply()
-                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, PostDetailsFragment()).commit()
+                goToPostDetailsFragment(post)
             }
         }
         val post = mPosts[position]

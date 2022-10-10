@@ -111,13 +111,14 @@ class PostCommentsActivity : AppCompatActivity() {
             if (post_comments_write_comment.text.isEmpty()) {
                 return
             }
-            val commentMap = HashMap<String, Any>()
+            val commentMap = HashMap<String, String>()
             commentMap["comment"] = post_comments_write_comment.text.toString()
             commentMap["publisher"] = firebaseUser.uid
             FirebaseDatabase.getInstance().reference.child("Comments").child(postId).push()
                 .setValue(commentMap).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         post_comments_write_comment.text.clear()
+                        addNotification(commentMap["comment"]!!)
                     }
                     else {
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
@@ -127,5 +128,16 @@ class PostCommentsActivity : AppCompatActivity() {
         post_comments_add_comment.setOnClickListener {
             addComment()
         }
+    }
+
+
+    private fun addNotification (comment : String) {
+        val notificationMap = HashMap<String, Any>()
+        notificationMap["userId"] = firebaseUser.uid
+        notificationMap["postId"] = postId
+        notificationMap["isPost"] = true
+        notificationMap["text"] = "commented: $comment"
+        FirebaseDatabase.getInstance().reference.child("Notifications").child(publisher)
+            .push().setValue(notificationMap)
     }
 }

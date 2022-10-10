@@ -1,6 +1,7 @@
 package com.kastorcode.instagramclone.Adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.kastorcode.instagramclone.Fragments.ProfileFragment
+import com.kastorcode.instagramclone.MainActivity
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.Services.followUser
@@ -33,14 +35,25 @@ class UserAdapter (
     }
 
 
-    override fun onCreateViewHolder (parent : ViewGroup, viewType: Int) : UserAdapter.ViewHolder {
+    override fun onCreateViewHolder (parent : ViewGroup, viewType: Int) : ViewHolder {
         val view = LayoutInflater.from(mContext)
             .inflate(R.layout.user_item_layout, parent, false)
-        return UserAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
 
-    override fun onBindViewHolder (holder : UserAdapter.ViewHolder, position : Int) {
+    override fun onBindViewHolder (holder : ViewHolder, position : Int) {
+        fun goToProfileFragment (profileId : String) {
+            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                .putString("profileId", profileId).apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment()).commit()
+        }
+        fun goToMainActivity (publisher : String) {
+            val intent = Intent(mContext, MainActivity::class.java)
+            intent.putExtra("publisher", publisher)
+            mContext.startActivity(intent)
+        }
         fun checkFollowingStatus (uid : String, followButton : Button) {
             followingRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange (snapshot : DataSnapshot) {
@@ -57,13 +70,14 @@ class UserAdapter (
             })
         }
         fun setClickListeners (user : User) {
-            holder.itemView.setOnClickListener(View.OnClickListener {
-                val pref = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                pref.putString("profileId", user.getUid())
-                pref.apply()
-                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ProfileFragment()).commit()
-            })
+            holder.itemView.setOnClickListener {
+                if (isFragment) {
+                    goToProfileFragment(user.getUid())
+                }
+                else {
+                    goToMainActivity(user.getUid())
+                }
+            }
             holder.followButton.setOnClickListener {
                 if (holder.followButton.text.toString() == "Follow") {
                     followUser(user.getUid())
