@@ -11,7 +11,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.kastorcode.instagramclone.Adapters.PostAdapter
+import com.kastorcode.instagramclone.Adapters.StoryAdapter
 import com.kastorcode.instagramclone.Models.Post
+import com.kastorcode.instagramclone.Models.Story
 
 import com.kastorcode.instagramclone.R
 
@@ -24,6 +26,8 @@ class HomeFragment : Fragment() {
     private lateinit var followingList : MutableList<String>
     private lateinit var postsList : MutableList<Post>
     private lateinit var postAdapter : PostAdapter
+    private lateinit var storyList : MutableList<Story>
+    private lateinit var storyAdapter : StoryAdapter
 
 
     override fun onCreateView (
@@ -31,7 +35,8 @@ class HomeFragment : Fragment() {
         savedInstanceState : Bundle?
     ) : View {
         setProps(inflater, container)
-        setHomeRecyclerView()
+        setHomeStoryView()
+        setHomePostsView()
         getFollowing()
         return fragmentHomeView
     }
@@ -44,21 +49,56 @@ class HomeFragment : Fragment() {
             .child(firebaseUser.uid).child("Following")
         followingList = ArrayList()
         postsList = ArrayList()
-        postAdapter = PostAdapter(context!!, postsList as ArrayList<Post>)
+        postAdapter = PostAdapter(context!!, postsList)
+        storyList = ArrayList()
+        storyAdapter = StoryAdapter(context!!, storyList)
     }
 
 
-    private fun setHomeRecyclerView () {
-        val homeRecyclerView = fragmentHomeView.findViewById<RecyclerView>(R.id.home_recycler_view)
+    private fun setHomeStoryView () {
+        val homeStoryView = fragmentHomeView.findViewById<RecyclerView>(R.id.home_story_view)
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.reverseLayout = true
         linearLayoutManager.stackFromEnd = true
-        homeRecyclerView.layoutManager = linearLayoutManager
-        homeRecyclerView.adapter = postAdapter
+        homeStoryView.layoutManager = linearLayoutManager
+    }
+
+
+    private fun setHomePostsView () {
+        val homePostsView = fragmentHomeView.findViewById<RecyclerView>(R.id.home_posts_view)
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        homePostsView.layoutManager = linearLayoutManager
+        homePostsView.adapter = postAdapter
     }
 
 
     private fun getFollowing () {
+        fun getStories () {
+            FirebaseDatabase.getInstance().reference.child("Stories")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val timeCurrent = System.currentTimeMillis()
+                            storyList.clear()
+                            for (id in followingList) {
+                                for (snapshot in dataSnapshot.child(id).children) {
+                                    val story = snapshot.getValue(Story::class.java)
+                                    if (timeCurrent > story!!.getTimeStart() &&
+                                        timeCurrent < story.getTimeEnd()
+                                    ) {
+                                        storyList.add(story)
+                                    }
+                                }
+                            }
+                            storyAdapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {}
+                })
+        }
         fun getPosts () {
             FirebaseDatabase.getInstance().reference.child("Posts")
                 .addValueEventListener(object : ValueEventListener {
@@ -85,6 +125,7 @@ class HomeFragment : Fragment() {
                     for (following in snapshot.children) {
                         following.key?.let { followingList.add(it) }
                     }
+                    getStories()
                     getPosts()
                 }
             }
