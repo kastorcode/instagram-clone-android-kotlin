@@ -1,14 +1,23 @@
 package com.kastorcode.instagramclone.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.kastorcode.instagramclone.AddStoryActivity
 import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 
@@ -28,8 +37,40 @@ class StoryAdapter (
     }
 
 
-    override fun onBindViewHolder (holder : ViewHolder, position : Int) {
+    override fun onBindViewHolder (holder : ViewHolder, @SuppressLint("RecyclerView") position : Int) {
+        fun getUserInfo (userId : String) {
+            FirebaseDatabase.getInstance().reference.child("Users")
+                .child(userId).addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val user = dataSnapshot.getValue(User::class.java)
+                            Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
+                                .into(holder.storyImageView)
+                            if (position != 0) {
+                                Picasso.get().load(user.getImage()).placeholder(R.drawable.profile)
+                                    .into(holder.storyImageSeenView)
+                                holder.storyUsernameView.text = user.getUserName()
+                            }
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
+        fun goToAddStoryActivity (story : Story) {
+            val intent = Intent(mContext, AddStoryActivity::class.java)
+                .putExtra("userId", story.getUserId())
+            mContext.startActivity(intent)
+        }
+        fun setClickListeners (story : Story) {
+            holder.itemView.setOnClickListener {
+                goToAddStoryActivity(story)
+            }
+        }
         val story = mStory[position]
+        getUserInfo(story.getUserId())
+        setClickListeners(story)
     }
 
 

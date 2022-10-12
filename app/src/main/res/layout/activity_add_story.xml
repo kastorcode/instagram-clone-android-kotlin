@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddStoryActivity"
+>
+    <RelativeLayout
+        android:id="@+id/add_story_adding_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B3000000"
+        android:visibility="invisible"
+    >
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_above="@+id/add_story_adding_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:padding="8dp"
+            android:indeterminateTint="@android:color/white"
+            android:background="#000000"
+        />
+
+        <TextView
+            android:id="@+id/add_story_adding_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="28dp"
+            android:background="#000000"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:text="adding new story"
+        />
+    </RelativeLayout>
+</RelativeLayout>
