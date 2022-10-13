@@ -108,7 +108,24 @@ class ShowUsersActivity : AppCompatActivity() {
                     }
                 })
         }
-        fun getViews () {}
+        fun getViews () {
+            FirebaseDatabase.getInstance().reference.child("Stories").child(id)
+                .child(intent.getStringExtra("storyId")!!).child("views")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            idList.clear()
+                            for (snapshot in dataSnapshot.children) {
+                                idList.add(snapshot.key!!)
+                            }
+                            showUsers()
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {
+                    }
+                })
+        }
         setShowUsersToolbar()
         setShowUsersRecyclerView()
         when (title) {
