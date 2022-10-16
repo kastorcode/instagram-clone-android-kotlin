@@ -57,9 +57,8 @@ class HomeFragment : Fragment() {
 
     private fun setHomeStoryView () {
         val homeStoryView = fragmentHomeView.findViewById<RecyclerView>(R.id.home_story_view)
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
+        homeStoryView.setHasFixedSize(true)
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeStoryView.layoutManager = linearLayoutManager
     }
 

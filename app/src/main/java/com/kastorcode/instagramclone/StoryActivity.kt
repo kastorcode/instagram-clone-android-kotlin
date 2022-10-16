@@ -120,7 +120,8 @@ class StoryActivity : AppCompatActivity() {
                 }
 
                 override fun onPrev () {
-                    Picasso.get().load(imageList[--counter]).placeholder(R.drawable.profile)
+                    if (--counter < 0) return
+                    Picasso.get().load(imageList[counter]).placeholder(R.drawable.profile)
                         .into(story_image_view)
                     getStorySeenNumber(storyList[counter])
                 }

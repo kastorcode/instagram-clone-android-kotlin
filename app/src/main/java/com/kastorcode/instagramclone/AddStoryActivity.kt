@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_add_story.*
 
 class AddStoryActivity : AppCompatActivity() {
 
-    private lateinit var firebaseUser : FirebaseUser
+    private lateinit var firebaseUserUid : String
     private lateinit var storageRef : StorageReference
     private lateinit var storyImageUri : Uri
 
@@ -37,7 +37,7 @@ class AddStoryActivity : AppCompatActivity() {
 
 
     private fun setProps () {
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         storageRef = FirebaseStorage.getInstance().reference.child("stories-pictures")
     }
 
@@ -61,9 +61,10 @@ class AddStoryActivity : AppCompatActivity() {
                     throw task.exception!!
                 }).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val storiesRef = FirebaseDatabase.getInstance().reference.child("Stories")
+                        val storiesRef = FirebaseDatabase.getInstance().reference
+                            .child("Stories").child(firebaseUserUid)
                         val fields : Map<String, Any> = mapOf(
-                            "userId" to firebaseUser.uid,
+                            "userId" to firebaseUserUid,
                             "storyId" to storiesRef.push().key!!,
                             "imageUrl" to task.result.toString(),
                             "timeStart" to ServerValue.TIMESTAMP,

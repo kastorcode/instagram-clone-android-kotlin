@@ -1,14 +1,17 @@
 package com.kastorcode.instagramclone.Adapters
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,6 +20,8 @@ import com.kastorcode.instagramclone.AddStoryActivity
 import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.Services.goToAddStoryActivity
+import com.kastorcode.instagramclone.StoryActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -24,6 +29,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 class StoryAdapter (
     private val mContext : Context, private val mStory : List<Story>
 ) : RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
+
+    private val firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreateViewHolder (parent : ViewGroup, viewType : Int) : ViewHolder {
         if (viewType == 0) {
@@ -38,9 +46,91 @@ class StoryAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, @SuppressLint("RecyclerView") position : Int) {
+        fun seenStory (userId : String) {
+            FirebaseDatabase.getInstance().reference.child("Stories").child(userId)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            var i = 0
+                            for (snapshot in dataSnapshot.children) {
+                                if (!snapshot.child("views").child(firebaseUserUid).exists() &&
+                                    System.currentTimeMillis() < snapshot.getValue(Story::class.java)!!.getTimeEnd()
+                                ) {
+                                    i++
+                                }
+                            }
+                            if (i > 0) {
+                                holder.storyImageView.visibility = View.VISIBLE
+                                holder.storyImageSeenView.visibility = View.INVISIBLE
+                            }
+                            else {
+                                holder.storyImageView.visibility = View.INVISIBLE
+                                holder.storyImageSeenView.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {}
+                })
+        }
+        fun goToStoryActivity () {
+            val intent = Intent(mContext, StoryActivity::class.java)
+                .putExtra("userId", firebaseUserUid)
+            mContext.startActivity(intent)
+        }
+        fun myStories (click : Boolean, story : Story) {
+            FirebaseDatabase.getInstance().reference.child("Stories").child(firebaseUserUid)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange (dataSnapshot : DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            var counter = 0
+                            val timeCurrent = System.currentTimeMillis()
+                            for (snapshot in dataSnapshot.children) {
+                                val story = snapshot.getValue(Story::class.java)
+                                if (timeCurrent > story!!.getTimeStart() &&
+                                    timeCurrent < story.getTimeEnd()
+                                ) {
+                                    counter++
+                                }
+                            }
+                            if (click) {
+                                if (counter > 0) {
+                                    val alertDialog = AlertDialog.Builder(mContext).create()
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "View Story")
+                                        { dialogInterface, which ->
+                                            goToStoryActivity()
+                                            dialogInterface.dismiss()
+                                        }
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Add Story")
+                                        { dialogInterface, which ->
+                                            goToAddStoryActivity(mContext, story.getUserId())
+                                            dialogInterface.dismiss()
+                                        }
+                                    alertDialog.show()
+                                }
+                                else {
+                                    goToAddStoryActivity(mContext, story.getUserId())
+                                }
+                            }
+                            else {
+                                if (counter > 0) {
+                                    holder.addStoryTextView.text = "My Story"
+                                    holder.addStoryImageView.visibility = View.GONE
+                                }
+                                else {
+                                    holder.addStoryTextView.text = "Add Story"
+                                    holder.addStoryImageView.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled (error : DatabaseError) {}
+                })
+        }
         fun getUserInfo (userId : String) {
             FirebaseDatabase.getInstance().reference.child("Users")
-                .child(userId).addValueEventListener(object : ValueEventListener {
+                .child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange (dataSnapshot : DataSnapshot) {
                         if (dataSnapshot.exists()) {
                             val user = dataSnapshot.getValue(User::class.java)
@@ -58,18 +148,24 @@ class StoryAdapter (
                     }
                 })
         }
-        fun goToAddStoryActivity (story : Story) {
-            val intent = Intent(mContext, AddStoryActivity::class.java)
-                .putExtra("userId", story.getUserId())
-            mContext.startActivity(intent)
-        }
         fun setClickListeners (story : Story) {
             holder.itemView.setOnClickListener {
-                goToAddStoryActivity(story)
+                if (holder.adapterPosition == 0) {
+                    myStories(true, story)
+                }
+                else {
+                    goToStoryActivity()
+                }
             }
         }
         val story = mStory[position]
         getUserInfo(story.getUserId())
+        if (holder.adapterPosition == 0) {
+            myStories(false, story)
+        }
+        else {
+            seenStory(story.getUserId())
+        }
         setClickListeners(story)
     }
 

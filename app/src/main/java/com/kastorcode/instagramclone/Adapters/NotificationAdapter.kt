@@ -18,6 +18,8 @@ import com.kastorcode.instagramclone.Fragments.ProfileFragment
 import com.kastorcode.instagramclone.Models.Notification
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.Services.goToPostDetailsFragment
+import com.kastorcode.instagramclone.Services.goToProfileFragment
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -34,18 +36,6 @@ class NotificationAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        fun goToPostDetailsFragment (postId : String) {
-            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                .putString("postId", postId).apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, PostDetailsFragment()).commit()
-        }
-        fun goToProfileFragment (profileId : String) {
-            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                .putString("profileId", profileId).apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment()).commit()
-        }
         fun getUserInfo (publisher : String) {
             FirebaseDatabase.getInstance().reference.child("Users")
                 .child(publisher).addValueEventListener(object : ValueEventListener {
@@ -79,10 +69,10 @@ class NotificationAdapter (
         fun setClickListeners (notification : Notification) {
             holder.itemView.setOnClickListener {
                 if (notification.getIsPost()) {
-                    goToPostDetailsFragment(notification.getPostId())
+                    goToPostDetailsFragment(mContext, notification.getPostId())
                 }
                 else {
-                    goToProfileFragment(notification.getUserId())
+                    goToProfileFragment(mContext, notification.getUserId())
                 }
             }
         }
