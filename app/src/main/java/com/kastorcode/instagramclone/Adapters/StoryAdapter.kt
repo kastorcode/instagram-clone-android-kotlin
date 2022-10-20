@@ -7,7 +7,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +15,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kastorcode.instagramclone.AddStoryActivity
 import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
-import com.kastorcode.instagramclone.Services.goToAddStoryActivity
+import com.kastorcode.instagramclone.services.navigation.goToAddStoryActivity
 import com.kastorcode.instagramclone.StoryActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -37,11 +35,11 @@ class StoryAdapter (
         if (viewType == 0) {
             val view = LayoutInflater.from(mContext)
                 .inflate(R.layout.add_story_item, parent, false)
-            return ViewHolder(view)
+            return ViewHolder(view, viewType)
         }
         val view = LayoutInflater.from(mContext)
             .inflate(R.layout.story_item, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, viewType)
     }
 
 
@@ -60,12 +58,12 @@ class StoryAdapter (
                                 }
                             }
                             if (i > 0) {
-                                holder.storyImageView.visibility = View.VISIBLE
-                                holder.storyImageSeenView.visibility = View.INVISIBLE
+                                holder.addStoryIconView.visibility = View.VISIBLE
+                                holder.addStoryAddView.visibility = View.GONE
                             }
                             else {
-                                holder.storyImageView.visibility = View.INVISIBLE
-                                holder.storyImageSeenView.visibility = View.VISIBLE
+                                holder.addStoryIconView.visibility = View.GONE
+                                holder.addStoryAddView.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -82,45 +80,42 @@ class StoryAdapter (
             FirebaseDatabase.getInstance().reference.child("Stories").child(firebaseUserUid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange (dataSnapshot : DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            var counter = 0
-                            val timeCurrent = System.currentTimeMillis()
-                            for (snapshot in dataSnapshot.children) {
-                                val story = snapshot.getValue(Story::class.java)
-                                if (timeCurrent > story!!.getTimeStart() &&
-                                    timeCurrent < story.getTimeEnd()
-                                ) {
-                                    counter++
-                                }
+                        var hasStory = false
+                        val timeCurrent = System.currentTimeMillis()
+                        for (snapshot in dataSnapshot.children) {
+                            val story = snapshot.getValue(Story::class.java)
+                            if (timeCurrent > story!!.getTimeStart() &&
+                                timeCurrent < story.getTimeEnd()
+                            ) {
+                                hasStory = true
+                                break
                             }
-                            if (click) {
-                                if (counter > 0) {
-                                    val alertDialog = AlertDialog.Builder(mContext).create()
-                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "View Story")
-                                        { dialogInterface, which ->
-                                            goToStoryActivity()
-                                            dialogInterface.dismiss()
-                                        }
-                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Add Story")
-                                        { dialogInterface, which ->
-                                            goToAddStoryActivity(mContext, story.getUserId())
-                                            dialogInterface.dismiss()
-                                        }
-                                    alertDialog.show()
+                        }
+                        if (click) {
+                            if (hasStory) {
+                                val alertDialog = AlertDialog.Builder(mContext).create()
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "View Story")
+                                { dialogInterface, which ->
+                                    goToStoryActivity()
+                                    dialogInterface.dismiss()
                                 }
-                                else {
+                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Add Story")
+                                { dialogInterface, which ->
                                     goToAddStoryActivity(mContext, story.getUserId())
+                                    dialogInterface.dismiss()
                                 }
+                                alertDialog.show()
                             }
                             else {
-                                if (counter > 0) {
-                                    holder.addStoryTextView.text = "My Story"
-                                    holder.addStoryImageView.visibility = View.GONE
-                                }
-                                else {
-                                    holder.addStoryTextView.text = "Add Story"
-                                    holder.addStoryImageView.visibility = View.VISIBLE
-                                }
+                                goToAddStoryActivity(mContext, story.getUserId())
+                            }
+                        }
+                        else {
+                            if (hasStory) {
+                                holder.addStoryTextView.text = "My Story"
+                            }
+                            else {
+                                holder.addStoryTextView.text = "Add Story"
                             }
                         }
                     }
@@ -135,11 +130,11 @@ class StoryAdapter (
                         if (dataSnapshot.exists()) {
                             val user = dataSnapshot.getValue(User::class.java)
                             Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
-                                .into(holder.storyImageView)
+                                .into(holder.addStoryIconView)
                             if (position != 0) {
                                 Picasso.get().load(user.getImage()).placeholder(R.drawable.profile)
-                                    .into(holder.storyImageSeenView)
-                                holder.storyUsernameView.text = user.getUserName()
+                                    .into(holder.addStoryAddView)
+                                holder.addStoryTextView.text = user.getUserName()
                             }
                         }
                     }
@@ -183,14 +178,23 @@ class StoryAdapter (
     }
 
 
-    class ViewHolder (@NonNull itemView : View) : RecyclerView.ViewHolder(itemView) {
-        // story_item.xml
-        val storyImageView : CircleImageView = itemView.findViewById(R.id.story_image_view)
-        val storyImageSeenView : CircleImageView = itemView.findViewById(R.id.story_image_seen_view)
-        val storyUsernameView : TextView = itemView.findViewById(R.id.story_username_view)
-        // add_story_item.xml
-        val addStoryImageView : CircleImageView = itemView.findViewById(R.id.add_story_image_view)
-        val addStoryAddView : CircleImageView = itemView.findViewById(R.id.add_story_add_view)
-        val addStoryTextView : TextView = itemView.findViewById(R.id.add_story_text_view)
+    class ViewHolder (@NonNull itemView : View, viewType : Int) : RecyclerView.ViewHolder(itemView) {
+        var addStoryIconView : CircleImageView
+        var addStoryAddView : CircleImageView
+        var addStoryTextView : TextView
+        init {
+            if (viewType == 0) {
+                // add_story_item.xml
+                addStoryIconView = itemView.findViewById(R.id.add_story_icon_view)
+                addStoryAddView = itemView.findViewById(R.id.add_story_add_view)
+                addStoryTextView = itemView.findViewById(R.id.add_story_text_view)
+            }
+            else {
+                // story_item.xml
+                addStoryIconView = itemView.findViewById(R.id.story_icon_view)
+                addStoryAddView = itemView.findViewById(R.id.story_icon_seen_view)
+                addStoryTextView = itemView.findViewById(R.id.story_username_view)
+            }
+        }
     }
 }

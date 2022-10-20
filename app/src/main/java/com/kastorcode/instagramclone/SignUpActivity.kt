@@ -126,6 +126,6 @@ class SignUpActivity : AppCompatActivity() {
 
 
     private fun hideRegisteringView () {
-        signup_registering_view.visibility = View.INVISIBLE
+        signup_registering_view.visibility = View.GONE
     }
 }

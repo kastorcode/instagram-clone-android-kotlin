@@ -76,6 +76,7 @@ class AddStoryActivity : AppCompatActivity() {
                                     Toast.makeText(this, "Story published successfully",
                                         Toast.LENGTH_LONG).show()
                                     hideAddStoryAddingView()
+                                    finish()
                                 }
                                 else {
                                     hadExceptionRaised(task.exception.toString())
@@ -107,12 +108,13 @@ class AddStoryActivity : AppCompatActivity() {
 
 
     private fun hideAddStoryAddingView () {
-        add_story_adding_view.visibility = View.INVISIBLE
+        add_story_adding_view.visibility = View.GONE
     }
 
 
     private fun hadExceptionRaised (message : String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         hideAddStoryAddingView()
+        finish()
     }
 }

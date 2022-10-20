@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Services
+package com.kastorcode.instagramclone.services
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

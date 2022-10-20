@@ -17,8 +17,8 @@ import com.kastorcode.instagramclone.Fragments.ProfileFragment
 import com.kastorcode.instagramclone.MainActivity
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
-import com.kastorcode.instagramclone.Services.followUser
-import com.kastorcode.instagramclone.Services.unfollowUser
+import com.kastorcode.instagramclone.services.user.followUser
+import com.kastorcode.instagramclone.services.unfollowUser
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 

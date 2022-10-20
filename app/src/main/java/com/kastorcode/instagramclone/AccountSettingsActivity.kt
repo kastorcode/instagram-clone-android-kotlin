@@ -7,28 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import com.kastorcode.instagramclone.Models.User
+import com.kastorcode.instagramclone.services.media.openImage
+import com.kastorcode.instagramclone.services.navigation.goToDeleteAccountActivity
+import com.kastorcode.instagramclone.services.user.*
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import java.lang.Exception
 import kotlinx.android.synthetic.main.activity_account_settings.*
 
 
 class AccountSettingsActivity : AppCompatActivity() {
 
-    private lateinit var firebaseUser : FirebaseUser
-    private lateinit var storageRef : StorageReference
+    private lateinit var firebaseUserUid : String
+    private lateinit var userProfileImage : String
     private var userImageUri : Uri? = null
 
 
@@ -36,7 +28,14 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_settings)
         setProps()
-        getUserInfo()
+        getUser(firebaseUserUid) { user ->
+            userProfileImage = user.getImage()
+            Picasso.get().load(userProfileImage).placeholder(R.drawable.profile)
+                .into(account_profile_image_view)
+            account_username.setText(user.getUserName())
+            account_fullname.setText(user.getFullName())
+            account_bio.setText(user.getBio())
+        }
         setClickListeners()
     }
 
@@ -49,7 +48,7 @@ class AccountSettingsActivity : AppCompatActivity() {
                 data != null
             ) {
                 userImageUri = CropImage.getActivityResult(data).uri
-                profile_image_view.setImageURI(userImageUri)
+                account_profile_image_view.setImageURI(userImageUri)
             }
         }
         getUserImageUri()
@@ -57,126 +56,67 @@ class AccountSettingsActivity : AppCompatActivity() {
 
 
     private fun setProps () {
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        storageRef = FirebaseStorage.getInstance().reference.child("profile-pictures")
-    }
-
-
-    private fun getUserInfo () {
-        FirebaseDatabase.getInstance().reference.child("Users")
-            .child(firebaseUser.uid).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (snapshot : DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val user = snapshot.getValue(User::class.java)
-                        Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
-                            .into(profile_image_view)
-                        profile_user_name.setText(user.getUserName())
-                        profile_full_name.setText(user.getFullName())
-                        profile_bio.setText(user.getBio())
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
+        firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
     }
 
 
     private fun setClickListeners () {
-        fun changeUserImage () {
-            CropImage.activity().setAspectRatio(1, 1)
-                .setGuidelines(CropImageView.Guidelines.ON).start(this)
-        }
-        fun signOut () {
-            FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this@AccountSettingsActivity, SignInActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+        account_close_btn.setOnClickListener {
             finish()
         }
-        fun saveUserInfo () {
-            fun uploadUserImage () {
-                if (userImageUri == null) {
-                    return
-                }
-                val fileRef = storageRef.child(firebaseUser.uid + ".jpg")
-                fileRef.putFile(userImageUri!!)
-                    .continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                        if (task.isSuccessful) {
-                            return@Continuation fileRef.downloadUrl
+        account_save_btn.setOnClickListener {
+            showAccountLoadingView {
+                updateUserProfileImage(
+                    userImageUri,
+                    {
+                        if (userImageUri != null) {
+                            hideAccountLoadingView()
                         }
-                        throw task.exception!!
-                    }).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val fields : Map<String, String> = mapOf(
-                                "image" to task.result.toString()
-                            )
-                            FirebaseDatabase.getInstance().reference.child("Users")
-                                .child(firebaseUser.uid).updateChildren(fields)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        hideProfileUpdatingView()
-                                    }
-                                    else {
-                                        hadExceptionRaised(task.exception.toString())
-                                    }
-                                }
-                        }
-                        else {
-                            hadExceptionRaised(task.exception.toString())
-                        }
-                    }
-            }
-            fun sendUserInfo () {
-                var fields : Map<String, String> = mapOf(
-                    "username" to profile_user_name.text.toString().lowercase(),
-                    "fullname" to profile_full_name.text.toString().lowercase(),
-                    "bio" to profile_bio.text.toString()
+                    },
+                    { exception -> hadExceptionRaised(exception) }
                 )
-                fields = fields.filterValues { value -> value.isNotEmpty() }
-                FirebaseDatabase.getInstance().reference.child("Users")
-                    .child(firebaseUser.uid).updateChildren(fields).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(this, "Account has been updated successfully",
-                                Toast.LENGTH_LONG).show()
-                        }
-                        else {
-                            Toast.makeText(this, task.exception.toString(),
-                                Toast.LENGTH_LONG).show()
-                        }
+                updateUserInfo(
+                    this,
+                    account_username.text.toString().lowercase(),
+                    account_fullname.text.toString().lowercase(),
+                    account_bio.text.toString(),
+                    {
                         if (userImageUri == null) {
-                            hideProfileUpdatingView()
+                            hideAccountLoadingView()
                         }
-                    }
+                    },
+                    { exception -> hadExceptionRaised(exception) }
+                )
             }
-            showProfileUpdatingView()
-            uploadUserImage()
-            sendUserInfo()
         }
-        profile_change_image_text_btn.setOnClickListener {
-            changeUserImage()
+        account_profile_image_view.setOnClickListener {
+            openImage(this, userProfileImage)
         }
-        profile_logout_btn.setOnClickListener {
-            signOut()
+        account_change_profile_image_txt.setOnClickListener {
+            setUserProfileImage(this)
         }
-        profile_save_btn.setOnClickListener {
-            saveUserInfo()
+        account_logout_btn.setOnClickListener {
+            signOut(this)
+        }
+        account_delete_btn.setOnClickListener {
+            goToDeleteAccountActivity(this)
         }
     }
 
 
-    private fun showProfileUpdatingView () {
-        profile_updating_view.visibility = View.VISIBLE
+    private fun showAccountLoadingView (callback : (() -> Unit)) {
+        account_loading_view.visibility = View.VISIBLE
+        callback()
     }
 
 
-    private fun hideProfileUpdatingView () {
-        profile_updating_view.visibility = View.INVISIBLE
+    private fun hideAccountLoadingView () {
+        account_loading_view.visibility = View.GONE
     }
 
 
-    private fun hadExceptionRaised (message : String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-        hideProfileUpdatingView()
+    private fun hadExceptionRaised (exception : Exception) {
+        Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+        hideAccountLoadingView()
     }
 }

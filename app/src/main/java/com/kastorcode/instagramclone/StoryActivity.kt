@@ -7,18 +7,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.Models.User
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_story.*
-import kotlin.properties.Delegates
 
 
 class StoryActivity : AppCompatActivity() {
@@ -77,8 +74,8 @@ class StoryActivity : AppCompatActivity() {
             story_delete.visibility = View.VISIBLE
         }
         else {
-            story_layout_seen.visibility = View.INVISIBLE
-            story_delete.visibility = View.INVISIBLE
+            story_layout_seen.visibility = View.GONE
+            story_delete.visibility = View.GONE
         }
     }
 
@@ -120,8 +117,8 @@ class StoryActivity : AppCompatActivity() {
                 }
 
                 override fun onPrev () {
-                    if (--counter < 0) return
-                    Picasso.get().load(imageList[counter]).placeholder(R.drawable.profile)
+                    if (counter == 0) return
+                    Picasso.get().load(imageList[--counter]).placeholder(R.drawable.profile)
                         .into(story_image_view)
                     getStorySeenNumber(storyList[counter])
                 }

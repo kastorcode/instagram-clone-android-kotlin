@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DeleteAccountActivity"
+>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleY="-1"
+        android:background="@drawable/back_ui"
+    />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="12dp"
+    >
+        <Button
+            android:id="@+id/delete_account_cancel_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAllCaps="true"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:text="Cancel"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="12dp"
+    >
+        <EditText
+            android:id="@+id/delete_account_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="6dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/inputs_background"
+            android:hint="Email Address"
+        />
+
+        <EditText
+            android:id="@+id/delete_account_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginBottom="6dp"
+            android:layout_below="@+id/delete_account_email"
+            android:inputType="textPassword"
+            android:background="@drawable/inputs_background"
+            android:hint="Password"
+        />
+
+        <Button
+            android:id="@+id/delete_account_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@+id/delete_account_password"
+            android:textAllCaps="false"
+            android:textSize="17sp"
+            android:background="@android:color/white"
+            android:textColor="@android:color/black"
+            android:text="Delete Account"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/delete_account_loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80FF0000"
+        android:visibility="gone"
+    >
+        <ProgressBar
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_above="@+id/delete_account_loading_txt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="28dp"
+            android:padding="8dp"
+            android:background="#FF0000"
+            android:indeterminateTint="@android:color/white"
+        />
+
+        <TextView
+            android:id="@+id/delete_account_loading_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="28sp"
+            android:background="#FF0000"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:text="Deleting..."
+        />
+    </RelativeLayout>
+</RelativeLayout>

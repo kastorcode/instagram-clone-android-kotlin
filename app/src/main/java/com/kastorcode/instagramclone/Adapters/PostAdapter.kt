@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,13 +15,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kastorcode.instagramclone.Fragments.PostDetailsFragment
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.PostCommentsActivity
 import com.kastorcode.instagramclone.R
-import com.kastorcode.instagramclone.Services.goToPostDetailsFragment
-import com.kastorcode.instagramclone.Services.goToProfileFragment
+import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
+import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
 import com.kastorcode.instagramclone.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView

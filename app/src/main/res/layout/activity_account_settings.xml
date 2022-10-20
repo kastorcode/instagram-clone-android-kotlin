@@ -8,13 +8,13 @@
     tools:context=".AccountSettingsActivity"
 >
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/profile_app_bar_layout"
+        android:id="@+id/account_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
     >
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/profile_toolbar"
+            android:id="@+id/account_toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginVertical="4dp"
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
             >
                 <ImageView
-                    android:id="@+id/profile_close_btn"
+                    android:id="@+id/account_close_btn"
                     android:layout_width="20dp"
                     android:layout_height="30dp"
                     android:layout_alignParentStart="true"
@@ -34,7 +34,7 @@
                 />
 
                 <ImageView
-                    android:id="@+id/profile_save_btn"
+                    android:id="@+id/account_save_btn"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -45,19 +45,19 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image_view"
+        android:id="@+id/account_profile_image_view"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:layout_below="@+id/profile_app_bar_layout"
+        android:layout_below="@+id/account_app_bar_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:src="@drawable/profile" />
 
     <TextView
-        android:id="@+id/profile_change_image_text_btn"
+        android:id="@+id/account_change_profile_image_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_image_view"
+        android:layout_below="@+id/account_profile_image_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7.5dp"
         android:text="Change Image"
@@ -67,10 +67,10 @@
     />
 
     <EditText
-        android:id="@+id/profile_full_name"
+        android:id="@+id/account_fullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_change_image_text_btn"
+        android:layout_below="@+id/account_change_profile_image_txt"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
         android:hint="Full Name"
@@ -78,10 +78,10 @@
     />
 
     <EditText
-        android:id="@+id/profile_user_name"
+        android:id="@+id/account_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_full_name"
+        android:layout_below="@+id/account_fullname"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
         android:hint="User Name"
@@ -89,10 +89,10 @@
     />
 
     <EditText
-        android:id="@+id/profile_bio"
+        android:id="@+id/account_bio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_user_name"
+        android:layout_below="@+id/account_username"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="15dp"
         android:inputType="text"
@@ -100,10 +100,10 @@
     />
 
     <Button
-        android:id="@+id/profile_logout_btn"
+        android:id="@+id/account_logout_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/profile_delete_btn"
+        android:layout_above="@+id/account_delete_btn"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="15dp"
         android:textAllCaps="false"
@@ -114,7 +114,7 @@
     />
 
     <Button
-        android:id="@+id/profile_delete_btn"
+        android:id="@+id/account_delete_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -128,16 +128,16 @@
     />
 
     <RelativeLayout
-        android:id="@+id/profile_updating_view"
+        android:id="@+id/account_loading_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#B35C32C7"
-        android:visibility="invisible"
+        android:visibility="gone"
     >
         <ProgressBar
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_above="@+id/profile_updating_txt"
+            android:layout_above="@+id/account_loading_txt"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="28dp"
             android:padding="8dp"
@@ -146,7 +146,7 @@
         />
 
         <TextView
-            android:id="@+id/profile_updating_txt"
+            android:id="@+id/account_loading_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

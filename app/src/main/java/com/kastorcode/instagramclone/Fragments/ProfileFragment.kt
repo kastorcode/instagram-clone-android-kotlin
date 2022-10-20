@@ -17,8 +17,8 @@ import com.kastorcode.instagramclone.Adapters.MyImagesAdapter
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
-import com.kastorcode.instagramclone.Services.followUser
-import com.kastorcode.instagramclone.Services.unfollowUser
+import com.kastorcode.instagramclone.services.user.followUser
+import com.kastorcode.instagramclone.services.unfollowUser
 import com.kastorcode.instagramclone.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*

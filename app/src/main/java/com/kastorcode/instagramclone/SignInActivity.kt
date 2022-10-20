@@ -99,6 +99,6 @@ class SignInActivity : AppCompatActivity() {
 
 
     private fun hideLoginView () {
-        signin_login_view.visibility = View.INVISIBLE
+        signin_login_view.visibility = View.GONE
     }
 }

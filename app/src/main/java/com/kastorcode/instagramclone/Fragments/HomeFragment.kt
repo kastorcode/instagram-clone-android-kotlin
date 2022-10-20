@@ -21,7 +21,7 @@ import com.kastorcode.instagramclone.R
 class HomeFragment : Fragment() {
 
     private lateinit var fragmentHomeView : View
-    private lateinit var firebaseUser : FirebaseUser
+    private lateinit var firebaseUserUid : String
     private lateinit var followingRef : DatabaseReference
     private lateinit var followingList : MutableList<String>
     private lateinit var postsList : MutableList<Post>
@@ -44,13 +44,14 @@ class HomeFragment : Fragment() {
 
     private fun setProps (inflater : LayoutInflater, container : ViewGroup?) {
         fragmentHomeView = inflater.inflate(R.layout.fragment_home, container, false)
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         followingRef = FirebaseDatabase.getInstance().reference.child("Follow")
-            .child(firebaseUser.uid).child("Following")
+            .child(firebaseUserUid).child("Following")
         followingList = ArrayList()
         postsList = ArrayList()
         postAdapter = PostAdapter(context!!, postsList)
         storyList = ArrayList()
+        storyList.add(Story(firebaseUserUid, "", "", 0, 0))
         storyAdapter = StoryAdapter(context!!, storyList)
     }
 
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
         homeStoryView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeStoryView.layoutManager = linearLayoutManager
+        homeStoryView.adapter = storyAdapter
     }
 
 

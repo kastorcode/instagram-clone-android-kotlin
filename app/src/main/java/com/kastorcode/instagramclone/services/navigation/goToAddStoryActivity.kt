@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Services
+package com.kastorcode.instagramclone.services.navigation
 
 import android.content.Context
 import android.content.Intent

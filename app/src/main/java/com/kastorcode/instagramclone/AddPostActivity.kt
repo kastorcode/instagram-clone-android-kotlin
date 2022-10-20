@@ -118,7 +118,7 @@ class AddPostActivity : AppCompatActivity() {
 
 
     private fun hideAddPostAddingView () {
-        add_post_adding_view.visibility = View.INVISIBLE
+        add_post_adding_view.visibility = View.GONE
     }
 
 

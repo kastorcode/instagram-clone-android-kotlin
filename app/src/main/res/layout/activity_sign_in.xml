@@ -79,7 +79,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#B35c32c7"
-        android:visibility="invisible"
+        android:visibility="gone"
     >
         <ProgressBar
             android:layout_width="64dp"

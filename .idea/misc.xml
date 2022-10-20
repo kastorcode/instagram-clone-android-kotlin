@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/layout/activity_account_settings.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/activity_add_story.xml" value="0.19947916666666668" />
+        <entry key="app/src/main/res/layout/activity_delete_account.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_post_comments.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.19947916666666668" />
