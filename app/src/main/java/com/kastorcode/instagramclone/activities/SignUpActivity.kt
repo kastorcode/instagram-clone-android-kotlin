@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.kastorcode.instagramclone.R
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 

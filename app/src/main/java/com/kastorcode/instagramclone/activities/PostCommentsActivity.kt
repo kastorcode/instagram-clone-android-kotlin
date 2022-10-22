@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Adapters.CommentsAdapter
 import com.kastorcode.instagramclone.Models.Comment
 import com.kastorcode.instagramclone.Models.User
+import com.kastorcode.instagramclone.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_post_comments.*
 

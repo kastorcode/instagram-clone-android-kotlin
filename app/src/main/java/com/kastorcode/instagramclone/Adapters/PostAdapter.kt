@@ -17,11 +17,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
-import com.kastorcode.instagramclone.PostCommentsActivity
+import com.kastorcode.instagramclone.activities.PostCommentsActivity
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
-import com.kastorcode.instagramclone.ShowUsersActivity
+import com.kastorcode.instagramclone.activities.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 

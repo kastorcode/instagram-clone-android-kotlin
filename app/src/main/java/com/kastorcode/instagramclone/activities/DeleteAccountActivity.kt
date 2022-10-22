@@ -1,9 +1,10 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.user.deleteUserAccount
 import com.kastorcode.instagramclone.services.user.signOut
 import kotlinx.android.synthetic.main.activity_delete_account.*

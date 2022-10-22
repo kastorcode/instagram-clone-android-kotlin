@@ -19,7 +19,7 @@ import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToAddStoryActivity
-import com.kastorcode.instagramclone.StoryActivity
+import com.kastorcode.instagramclone.activities.StoryActivity
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 

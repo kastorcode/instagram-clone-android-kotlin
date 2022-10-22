@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.media.openImage
 import com.kastorcode.instagramclone.services.navigation.goToDeleteAccountActivity
 import com.kastorcode.instagramclone.services.user.*

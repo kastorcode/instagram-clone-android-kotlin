@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostCommentsActivity"
+    tools:context=".activities.PostCommentsActivity"
 >
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/post_comments_app_bar_layout"

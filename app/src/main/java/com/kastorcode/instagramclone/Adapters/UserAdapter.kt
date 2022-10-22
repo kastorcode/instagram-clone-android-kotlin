@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.kastorcode.instagramclone.Fragments.ProfileFragment
-import com.kastorcode.instagramclone.MainActivity
+import com.kastorcode.instagramclone.activities.MainActivity
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.user.followUser

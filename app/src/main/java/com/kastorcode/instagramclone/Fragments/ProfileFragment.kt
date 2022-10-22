@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.AccountSettingsActivity
+import com.kastorcode.instagramclone.activities.AccountSettingsActivity
 import com.kastorcode.instagramclone.Adapters.MyImagesAdapter
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.user.followUser
 import com.kastorcode.instagramclone.services.unfollowUser
-import com.kastorcode.instagramclone.ShowUsersActivity
+import com.kastorcode.instagramclone.activities.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlin.collections.ArrayList

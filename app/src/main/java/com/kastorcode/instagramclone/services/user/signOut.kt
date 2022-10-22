@@ -3,7 +3,7 @@ package com.kastorcode.instagramclone.services.user
 import android.app.Activity
 import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
-import com.kastorcode.instagramclone.SignInActivity
+import com.kastorcode.instagramclone.activities.SignInActivity
 
 
 fun signOut (activity : Activity) {

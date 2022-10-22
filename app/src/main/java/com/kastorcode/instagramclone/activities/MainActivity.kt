@@ -1,19 +1,15 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.kastorcode.instagramclone.Fragments.HomeFragment
 import com.kastorcode.instagramclone.Fragments.NotificationsFragment
 import com.kastorcode.instagramclone.Fragments.ProfileFragment
 import com.kastorcode.instagramclone.Fragments.SearchFragment
+import com.kastorcode.instagramclone.R
 
 class MainActivity : AppCompatActivity() {
 

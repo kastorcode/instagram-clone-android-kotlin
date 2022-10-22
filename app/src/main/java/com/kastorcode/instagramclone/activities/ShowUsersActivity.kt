@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,8 +11,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Adapters.UserAdapter
 import com.kastorcode.instagramclone.Models.User
-import kotlinx.android.synthetic.main.fragment_profile.view.*
-import kotlinx.android.synthetic.main.fragment_search.view.*
+import com.kastorcode.instagramclone.R
 
 
 class ShowUsersActivity : AppCompatActivity() {

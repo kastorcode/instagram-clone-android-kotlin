@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +7,8 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.kastorcode.instagramclone.R
 import kotlinx.android.synthetic.main.activity_sign_in.*
-import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
 class SignInActivity : AppCompatActivity() {

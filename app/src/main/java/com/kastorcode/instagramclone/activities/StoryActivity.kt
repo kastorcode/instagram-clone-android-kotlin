@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone
+package com.kastorcode.instagramclone.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.Models.User
+import com.kastorcode.instagramclone.R
 import com.squareup.picasso.Picasso
 import jp.shts.android.storiesprogressview.StoriesProgressView
 import kotlinx.android.synthetic.main.activity_story.*
