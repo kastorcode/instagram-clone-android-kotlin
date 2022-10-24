@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.post.addPost
-import com.kastorcode.instagramclone.services.post.getPostImage
+import com.kastorcode.instagramclone.services.post.pickPostImage
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_add_post.*
 import java.lang.Exception
@@ -27,7 +27,7 @@ class AddPostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_post)
         setProps()
         setClickListeners()
-        getPostImage(this)
+        pickPostImage(this)
     }
 
 
@@ -74,7 +74,7 @@ class AddPostActivity : AppCompatActivity() {
             }
         }
         add_post_image_view.setOnClickListener {
-            getPostImage(this)
+            pickPostImage(this)
         }
     }
 

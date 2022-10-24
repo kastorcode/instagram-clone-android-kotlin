@@ -6,23 +6,24 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Adapters.CommentsAdapter
 import com.kastorcode.instagramclone.Models.Comment
-import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.media.openImage
+import com.kastorcode.instagramclone.services.post.addPostComment
+import com.kastorcode.instagramclone.services.post.getPostComments
+import com.kastorcode.instagramclone.services.post.getPostImage
+import com.kastorcode.instagramclone.services.user.getUser
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_post_comments.*
+import java.lang.Exception
 
 
 class PostCommentsActivity : AppCompatActivity() {
 
-    private lateinit var firebaseUser : FirebaseUser
+    private lateinit var firebaseUserUid : String
     private lateinit var postId : String
+    private var postImage : String? = null
     private lateinit var publisher : String
     private lateinit var commentsAdapter : CommentsAdapter
     private lateinit var commentsList : MutableList<Comment>
@@ -32,15 +33,22 @@ class PostCommentsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_comments)
         setProps()
-        getPostImage()
-        getUserInfo()
-        getComments()
+        getPostImage(
+            postId,
+            post_comments_image_comment,
+            { postImage = it }
+        )
+        getUser(firebaseUserUid) { user ->
+            Picasso.get().load(user.getImage()).placeholder(R.drawable.profile)
+                .into(post_comments_profile_image)
+        }
+        getPostComments(postId, commentsList, commentsAdapter)
         setClickListeners()
     }
 
 
     private fun setProps () {
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
         postId = intent.getStringExtra("postId").toString()
         publisher = intent.getStringExtra("publisher").toString()
         commentsList = ArrayList()
@@ -53,92 +61,30 @@ class PostCommentsActivity : AppCompatActivity() {
     }
 
 
-    private fun getPostImage () {
-        FirebaseDatabase.getInstance().reference.child("Posts")
-            .child(postId).child("postImage")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (dataSnapshot : DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Picasso.get().load(dataSnapshot.value.toString())
-                            .placeholder(R.drawable.profile).into(post_comments_image_comment)
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
-    }
-
-
-    private fun getUserInfo () {
-        FirebaseDatabase.getInstance().reference.child("Users")
-            .child(firebaseUser.uid).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (dataSnapshot : DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        val user = dataSnapshot.getValue(User::class.java)
-                        Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
-                            .into(post_comments_profile_image)
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
-    }
-
-
-    private fun getComments () {
-        FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (dataSnapshot : DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        commentsList.clear()
-                        for (snapshot in dataSnapshot.children) {
-                            val comment = snapshot.getValue(Comment::class.java)
-                            commentsList.add(comment!!)
-                        }
-                        commentsAdapter.notifyDataSetChanged()
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
-    }
-
-
     private fun setClickListeners () {
-        fun addComment () {
-            if (post_comments_write_comment.text.isEmpty()) {
-                return
+        post_comments_image_comment.setOnClickListener {
+            if (postImage != null) {
+                openImage(this, postImage!!)
             }
-            val commentMap = HashMap<String, String>()
-            commentMap["comment"] = post_comments_write_comment.text.toString()
-            commentMap["publisher"] = firebaseUser.uid
-            FirebaseDatabase.getInstance().reference.child("Comments").child(postId).push()
-                .setValue(commentMap).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        post_comments_write_comment.text.clear()
-                        addNotification(commentMap["comment"]!!)
-                    }
-                    else {
-                        Toast.makeText(this, task.exception.toString(), Toast.LENGTH_LONG).show()
-                    }
-                }
         }
         post_comments_add_comment.setOnClickListener {
-            addComment()
+            if (post_comments_write_comment.text.isNotEmpty()) {
+                addPostComment(
+                    postId,
+                    post_comments_write_comment.text.toString(),
+                    {
+                        post_comments_write_comment.text.clear()
+                    },
+                    { exception ->
+                        hadExceptionRaised(exception)
+                    }
+                )
+            }
         }
     }
 
 
-    private fun addNotification (comment : String) {
-        val notificationMap = HashMap<String, Any>()
-        notificationMap["userId"] = firebaseUser.uid
-        notificationMap["postId"] = postId
-        notificationMap["isPost"] = true
-        notificationMap["text"] = "commented: $comment"
-        FirebaseDatabase.getInstance().reference.child("Notifications").child(publisher)
-            .push().setValue(notificationMap)
+    private fun hadExceptionRaised (exception : Exception) {
+        Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
     }
 }
