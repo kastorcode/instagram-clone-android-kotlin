@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Adapters
+package com.kastorcode.instagramclone.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,15 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Notification
-import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
+import com.kastorcode.instagramclone.services.post.getPostImage
+import com.kastorcode.instagramclone.services.user.getUser
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -33,37 +30,8 @@ class NotificationAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        fun getUserInfo (publisher : String) {
-            FirebaseDatabase.getInstance().reference.child("Users")
-                .child(publisher).addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange (dataSnapshot : DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            val user = dataSnapshot.getValue(User::class.java)
-                            Picasso.get().load(user!!.getImage()).placeholder(R.drawable.profile)
-                                .into(holder.notificationsProfileImage)
-                            holder.notificationsUsername.text = user.getUserName()
-                        }
-                    }
-
-                    override fun onCancelled (error : DatabaseError) {
-                    }
-                })
-        }
-        fun getPostImage (postId : String) {
-            FirebaseDatabase.getInstance().reference.child("Posts").child(postId)
-                .child("postImage").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange (dataSnapshot : DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            Picasso.get().load(dataSnapshot.value.toString())
-                                .placeholder(R.drawable.profile).into(holder.notificationsPostImage)
-                        }
-                    }
-
-                    override fun onCancelled (error : DatabaseError) {
-                    }
-                })
-        }
-        fun setClickListeners (notification : Notification) {
+        val notification = mNotifications[position]
+        fun setClickListeners () {
             holder.itemView.setOnClickListener {
                 if (notification.getIsPost()) {
                     goToPostDetailsFragment(mContext, notification.getPostId())
@@ -73,17 +41,20 @@ class NotificationAdapter (
                 }
             }
         }
-        val notification = mNotifications[position]
         holder.notificationsComment.text = notification.getText()
-        getUserInfo(notification.getUserId())
+        getUser(notification.getUserId()) { user ->
+            Picasso.get().load(user.getImage()).placeholder(R.drawable.profile)
+                .into(holder.notificationsProfileImage)
+            holder.notificationsUsername.text = user.getUserName()
+        }
         if (notification.getIsPost()) {
             holder.notificationsPostImage.visibility = View.VISIBLE
-            getPostImage(notification.getPostId())
+            getPostImage(notification.getPostId(), holder.notificationsPostImage)
         }
         else {
             holder.notificationsPostImage.visibility = View.GONE
         }
-        setClickListeners(notification)
+        setClickListeners()
     }
 
 

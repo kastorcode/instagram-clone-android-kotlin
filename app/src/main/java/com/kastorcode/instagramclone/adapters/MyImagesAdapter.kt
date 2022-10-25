@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Adapters
+package com.kastorcode.instagramclone.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.NonNull
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.kastorcode.instagramclone.Fragments.PostDetailsFragment
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.squareup.picasso.Picasso
 
 
@@ -26,20 +25,14 @@ class MyImagesAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        fun goToPostDetailsFragment (post : Post) {
-            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                .putString("postId", post.getPostId()).apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, PostDetailsFragment()).commit()
-        }
-        fun setClickListeners (post : Post) {
+        val post = mPosts[position]
+        fun setClickListeners () {
             holder.myImagesImage.setOnClickListener {
-                goToPostDetailsFragment(post)
+                goToPostDetailsFragment(mContext, post.getPostId())
             }
         }
-        val post = mPosts[position]
         Picasso.get().load(post.getPostImage()).into(holder.myImagesImage)
-        setClickListeners(post)
+        setClickListeners()
     }
 
 

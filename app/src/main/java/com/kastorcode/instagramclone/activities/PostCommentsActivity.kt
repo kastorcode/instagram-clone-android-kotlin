@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.kastorcode.instagramclone.Adapters.CommentsAdapter
+import com.kastorcode.instagramclone.adapters.CommentsAdapter
 import com.kastorcode.instagramclone.Models.Comment
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.media.openImage

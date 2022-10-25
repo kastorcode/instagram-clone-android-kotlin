@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Adapters.PostAdapter
-import com.kastorcode.instagramclone.Adapters.StoryAdapter
+import com.kastorcode.instagramclone.adapters.PostAdapter
+import com.kastorcode.instagramclone.adapters.StoryAdapter
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.Story
 

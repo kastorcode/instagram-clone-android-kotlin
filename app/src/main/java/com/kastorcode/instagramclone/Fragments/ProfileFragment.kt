@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.kastorcode.instagramclone.activities.AccountSettingsActivity
-import com.kastorcode.instagramclone.Adapters.MyImagesAdapter
+import com.kastorcode.instagramclone.adapters.MyImagesAdapter
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R

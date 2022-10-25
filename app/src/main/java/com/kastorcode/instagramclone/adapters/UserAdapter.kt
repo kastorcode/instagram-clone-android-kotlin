@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Adapters
+package com.kastorcode.instagramclone.adapters
 
 import android.content.Context
 import android.content.Intent

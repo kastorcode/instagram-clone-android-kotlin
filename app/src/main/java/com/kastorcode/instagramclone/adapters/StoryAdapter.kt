@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Adapters
+package com.kastorcode.instagramclone.adapters
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
