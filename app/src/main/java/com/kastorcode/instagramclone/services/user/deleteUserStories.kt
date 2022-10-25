@@ -7,43 +7,41 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Story
 import com.kastorcode.instagramclone.services.story.deleteStory
-import com.kastorcode.instagramclone.services.story.deleteStoryImage
 
 
 fun deleteUserStories (
     callback : (() -> Unit)? = null, errorCallback : ((exception : Exception) -> Unit)? = null
 ) {
     var wasSuccessful = true
+
+    fun success () {
+        if (wasSuccessful && callback != null) {
+            callback()
+        }
+    }
+
+    fun failure (exception : Exception) {
+        wasSuccessful = false
+        if (errorCallback != null) {
+            errorCallback(exception)
+        }
+    }
+
     FirebaseDatabase.getInstance().reference.child("Stories").child(FirebaseAuth.getInstance().currentUser!!.uid)
         .addValueEventListener(object : ValueEventListener {
             override fun onDataChange (dataSnapshot : DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
                     if (!wasSuccessful) { break }
                     val story = snapshot.getValue(Story::class.java)
-                    deleteStoryImage(
+                    deleteStory(
                         story!!.getImageUrl(),
-                        {
-                            deleteStory(
-                                snapshot.ref,
-                                null
-                            ) { exception ->
-                                wasSuccessful = false
-                                if (errorCallback != null) {
-                                    errorCallback(exception)
-                                }
-                            }
-                        },
-                        { exception ->
-                            wasSuccessful = false
-                            if (errorCallback != null) {
-                                errorCallback(exception)
-                            }
-                        }
-                    )
+                        snapshot.ref,
+                        null
+                    ) { exception ->
+                        failure(exception)
+                    }
                 }
-                if (wasSuccessful && callback != null) {
-                    callback()
-                }
+                success()
             }
 
             override fun onCancelled (error : DatabaseError) {}

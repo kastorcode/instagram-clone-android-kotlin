@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.user.deleteUserAccount
-import com.kastorcode.instagramclone.services.user.signOut
+import com.kastorcode.instagramclone.services.auth.signOut
 import kotlinx.android.synthetic.main.activity_delete_account.*
 import java.lang.Exception
 

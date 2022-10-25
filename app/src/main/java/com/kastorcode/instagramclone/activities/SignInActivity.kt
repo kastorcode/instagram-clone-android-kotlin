@@ -1,21 +1,23 @@
 package com.kastorcode.instagramclone.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.auth.signIn
+import com.kastorcode.instagramclone.services.navigation.goToMainActivity
+import com.kastorcode.instagramclone.services.navigation.goToSignUpActivity
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import java.lang.Exception
 
 
 class SignInActivity : AppCompatActivity() {
 
     override fun onStart () {
         super.onStart()
-        redirectIfLogged()
+        goToMainActivity(this)
     }
 
 
@@ -26,79 +28,42 @@ class SignInActivity : AppCompatActivity() {
     }
 
 
-    private fun redirectIfLogged () {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            val intent = Intent(this@SignInActivity, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            finish()
-        }
-    }
-
-
     private fun setClickListeners () {
         signin_login_btn.setOnClickListener {
-            signIn()
+            showLoginView {
+                signIn(
+                    signin_email.text.toString(),
+                    signin_password.text.toString(),
+                    {
+                        hideLoginView()
+                        goToMainActivity(this)
+                    },
+                    { exception ->
+                        hadExceptionRaised(exception)
+                    }
+                )
+            }
         }
         signin_signup_btn.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
+            goToSignUpActivity(this)
         }
     }
 
 
-    private fun signIn () {
-        fun getFields () : Map<String, String> {
-            return mapOf(
-                "email" to signin_email.text.toString(),
-                "password" to signin_password.text.toString()
-            )
-        }
-        fun isFieldsValid (fields : Map<String, String>) : Boolean {
-            fun showMessage (field : String) {
-                Toast.makeText(this, "$field is required", Toast.LENGTH_LONG).show()
-            }
-            when {
-                TextUtils.isEmpty(fields["email"]) -> showMessage("Email")
-                TextUtils.isEmpty(fields["password"]) -> showMessage("Password")
-                else -> {
-                    return true
-                }
-            }
-            return false
-        }
-        fun loginUser (fields : Map<String, String>) {
-            FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(fields["email"]!!, fields["password"]!!)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        hideLoginView()
-                        redirectIfLogged()
-                    }
-                    else {
-                        hadExceptionRaised(task.exception.toString())
-                    }
-                }
-        }
-        val fields = getFields()
-        if (!isFieldsValid(fields)) return
-        showLoginView()
-        loginUser(fields)
-    }
-
-
-    private fun hadExceptionRaised (message : String) {
-        Toast.makeText(this, "[Error] $message", Toast.LENGTH_LONG).show()
-        FirebaseAuth.getInstance().signOut()
-        hideLoginView()
-    }
-
-
-    private fun showLoginView () {
+    private fun showLoginView (callback : (() -> Unit)) {
         signin_login_view.visibility = View.VISIBLE
+        callback()
     }
 
 
     private fun hideLoginView () {
         signin_login_view.visibility = View.GONE
+    }
+
+
+    private fun hadExceptionRaised (exception : Exception) {
+        Toast.makeText(this, exception.toString(), Toast.LENGTH_LONG).show()
+        FirebaseAuth.getInstance().signOut()
+        hideLoginView()
     }
 }

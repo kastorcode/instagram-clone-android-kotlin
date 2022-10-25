@@ -24,7 +24,13 @@ fun uploadStoryImage (
         .child("${System.currentTimeMillis()}.jpg")
     fileRef.putFile(storyImageUri)
         .addOnSuccessListener {
-            success(fileRef.downloadUrl.toString())
+            fileRef.downloadUrl
+                .addOnSuccessListener { uri ->
+                    success(uri.toString())
+                }
+                .addOnFailureListener { exception ->
+                    failure(exception)
+                }
         }
         .addOnFailureListener { exception ->
             failure(exception)

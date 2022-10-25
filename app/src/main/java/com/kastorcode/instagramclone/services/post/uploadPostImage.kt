@@ -24,7 +24,13 @@ fun uploadPostImage (
         .child("${System.currentTimeMillis()}.jpg")
     fileRef.putFile(postImageUri)
         .addOnSuccessListener {
-            success(fileRef.downloadUrl.toString())
+            fileRef.downloadUrl
+                .addOnSuccessListener { uri ->
+                    success(uri.toString())
+                }
+                .addOnFailureListener { exception ->
+                    failure(exception)
+                }
         }
         .addOnFailureListener { exception ->
             failure(exception)
