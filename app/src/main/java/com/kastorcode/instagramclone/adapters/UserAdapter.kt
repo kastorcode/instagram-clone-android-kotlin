@@ -1,26 +1,25 @@
 package com.kastorcode.instagramclone.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.NonNull
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Fragments.ProfileFragment
-import com.kastorcode.instagramclone.activities.MainActivity
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.navigation.goToMainActivity
+import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
 import com.kastorcode.instagramclone.services.user.followUser
-import com.kastorcode.instagramclone.services.unfollowUser
+import com.kastorcode.instagramclone.services.user.userIsFollowing
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import java.lang.Exception
 
 
 class UserAdapter (
@@ -28,11 +27,9 @@ class UserAdapter (
     private val isFragment : Boolean = false
 ) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
-    private var firebaseUser : FirebaseUser? = FirebaseAuth.getInstance().currentUser
-    private val followingRef : DatabaseReference = firebaseUser?.uid.let {
-        FirebaseDatabase.getInstance().reference.child("Follow")
-            .child(it.toString()).child("Following")
-    }
+    private val followingRef : DatabaseReference = FirebaseDatabase.getInstance().reference
+        .child("Follow").child(FirebaseAuth.getInstance().currentUser!!.uid)
+        .child("Following")
 
 
     override fun onCreateViewHolder (parent : ViewGroup, viewType: Int) : ViewHolder {
@@ -43,63 +40,46 @@ class UserAdapter (
 
 
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
-        fun goToProfileFragment (profileId : String) {
-            mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-                .putString("profileId", profileId).apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment()).commit()
-        }
-        fun goToMainActivity (publisher : String) {
-            val intent = Intent(mContext, MainActivity::class.java)
-            intent.putExtra("publisher", publisher)
-            mContext.startActivity(intent)
-        }
-        fun checkFollowingStatus (uid : String, followButton : Button) {
-            followingRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (snapshot : DataSnapshot) {
-                    if (snapshot.child(uid).exists()) {
-                        followButton.text = "Following"
-                    }
-                    else {
-                        followButton.text = "Follow"
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {
-                }
-            })
-        }
-        fun setClickListeners (user : User) {
+        val user = mUser[position]
+        fun setClickListeners () {
             holder.itemView.setOnClickListener {
                 if (isFragment) {
-                    goToProfileFragment(user.getUid())
+                    goToProfileFragment(mContext, user.getUid())
                 }
                 else {
-                    goToMainActivity(user.getUid())
+                    goToMainActivity(mContext, user.getUid())
                 }
             }
             holder.followButton.setOnClickListener {
-                if (holder.followButton.text.toString() == "Follow") {
-                    followUser(user.getUid())
-                }
-                else {
-                    unfollowUser(user.getUid())
+                followUser(user.getUid(), holder.followButton.text.toString(), null)
+                { exception ->
+                    hadExceptionRaised(exception)
                 }
             }
         }
-
-        val user = mUser[position]
-        Picasso.get().load(user.getImage())
-            .placeholder(R.drawable.profile).into(holder.imageImageView)
+        Picasso.get().load(user.getImage()).placeholder(R.drawable.profile)
+            .into(holder.imageImageView)
         holder.userNameTextView.text = user.getUserName()
         holder.fullNameTextView.text = user.getFullName()
-        checkFollowingStatus(user.getUid(), holder.followButton)
-        setClickListeners(user)
+        userIsFollowing(followingRef, user.getUid()) { isFollowing ->
+            if (isFollowing) {
+                holder.followButton.text = "Following"
+            }
+            else {
+                holder.followButton.text = "Follow"
+            }
+        }
+        setClickListeners()
     }
 
 
     override fun getItemCount () : Int {
         return mUser.size
+    }
+
+
+    private fun hadExceptionRaised (exception : Exception) {
+        Toast.makeText(mContext, exception.toString(), Toast.LENGTH_LONG).show()
     }
 
 

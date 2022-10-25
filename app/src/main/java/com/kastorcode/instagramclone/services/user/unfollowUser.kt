@@ -1,34 +1,40 @@
-package com.kastorcode.instagramclone.services
+package com.kastorcode.instagramclone.services.user
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 
 fun unfollowUser (
-    userUid: String, callback : (() -> Unit)? = null, errorCallback : (() -> Unit)? = null
-) : Unit {
-    val myUid = FirebaseAuth.getInstance().currentUser!!.uid
-    FirebaseDatabase.getInstance().reference.child("Follow").child(myUid)
-        .child("Following").child(userUid).removeValue()
-        .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                FirebaseDatabase.getInstance().reference.child("Follow")
-                    .child(userUid).child("Followers").child(myUid).removeValue()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            if (callback != null) {
-                                callback()
-                            }
-                        }
-                        else {
-                            if (errorCallback != null) {
-                                errorCallback()
-                            }
-                        }
-                    }
-            }
-            else if (errorCallback != null) {
-                errorCallback()
-            }
+    userId: String,
+    callback : (() -> Unit)? = null, errorCallback : ((exception : Exception) -> Unit)? = null
+) {
+    fun success () {
+        if (callback != null) {
+            callback()
+        }
+    }
+
+    fun failure (exception : Exception) {
+        if (errorCallback != null) {
+            errorCallback(exception)
+        }
+    }
+
+    val firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+
+    FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUserUid)
+        .child("Following").child(userId).removeValue()
+        .addOnSuccessListener {
+            FirebaseDatabase.getInstance().reference.child("Follow").child(userId)
+                .child("Followers").child(firebaseUserUid).removeValue()
+                .addOnSuccessListener {
+                    success()
+                }
+                .addOnFailureListener { exception ->
+                    failure(exception)
+                }
+        }
+        .addOnFailureListener { exception ->
+            failure(exception)
         }
 }

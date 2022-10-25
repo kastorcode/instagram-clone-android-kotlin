@@ -1,6 +1,7 @@
 package com.kastorcode.instagramclone.services.navigation
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
 import com.kastorcode.instagramclone.activities.MainActivity
@@ -13,4 +14,11 @@ fun goToMainActivity (activity : Activity) {
         activity.startActivity(intent)
         activity.finish()
     }
+}
+
+
+fun goToMainActivity (context : Context, publisher : String) {
+    val intent = Intent(context, MainActivity::class.java)
+        .putExtra("publisher", publisher)
+    context.startActivity(intent)
 }
