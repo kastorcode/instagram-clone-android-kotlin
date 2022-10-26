@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.kastorcode.instagramclone.Models.Notification
+import com.kastorcode.instagramclone.models.Notification
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.kastorcode.instagramclone.services.navigation.goToProfileFragment

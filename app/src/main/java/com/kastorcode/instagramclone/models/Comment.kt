@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Models
+package com.kastorcode.instagramclone.models
 
 
 class Comment {
@@ -11,18 +11,13 @@ class Comment {
 
 
     constructor (comment : String, publisher : String) {
-        setComment(comment)
+        this.comment = comment
         this.publisher = publisher
     }
 
 
     fun getComment () : String {
         return comment
-    }
-
-
-    fun setComment (comment : String) {
-        this.comment = comment
     }
 
 

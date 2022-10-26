@@ -2,7 +2,7 @@ package com.kastorcode.instagramclone.services.post
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Models.Comment
+import com.kastorcode.instagramclone.models.Comment
 
 
 fun deleteUserComments (

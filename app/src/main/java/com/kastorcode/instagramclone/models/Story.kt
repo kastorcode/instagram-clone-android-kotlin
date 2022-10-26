@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Models
+package com.kastorcode.instagramclone.models
 
 
 class Story {

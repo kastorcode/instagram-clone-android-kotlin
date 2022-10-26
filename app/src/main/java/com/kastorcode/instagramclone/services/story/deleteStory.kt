@@ -1,7 +1,7 @@
 package com.kastorcode.instagramclone.services.story
 
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.models.Story
 
 
 private fun success (callback : (() -> Unit)?) {

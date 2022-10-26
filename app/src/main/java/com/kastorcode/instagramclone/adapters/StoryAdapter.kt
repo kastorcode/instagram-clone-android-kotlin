@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.models.Story
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToStoryActivity
 import com.kastorcode.instagramclone.services.story.addOrViewMyStories

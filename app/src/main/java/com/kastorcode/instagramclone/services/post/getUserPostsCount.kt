@@ -1,27 +1,27 @@
 package com.kastorcode.instagramclone.services.post
 
-import android.annotation.SuppressLint
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kastorcode.instagramclone.adapters.CommentsAdapter
-import com.kastorcode.instagramclone.models.Comment
+import com.kastorcode.instagramclone.models.Post
 
 
-fun getPostComments (
-    postId : String, commentsList : MutableList<Comment>, commentsAdapter : CommentsAdapter
+fun getUserPostsCount (
+    userId : String,
+    callback : ((count : Int) -> Unit)
 ) {
-    FirebaseDatabase.getInstance().reference.child("Comments").child(postId)
+    FirebaseDatabase.getInstance().reference.child("Posts")
         .addValueEventListener(object : ValueEventListener {
-            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange (dataSnapshot : DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    commentsList.clear()
+                    var count = 0
                     for (snapshot in dataSnapshot.children) {
-                        commentsList.add(snapshot.getValue(Comment::class.java)!!)
+                        if (snapshot.getValue(Post::class.java)!!.getPublisher() == userId) {
+                            count++
+                        }
                     }
-                    commentsAdapter.notifyDataSetChanged()
+                    callback(count)
                 }
             }
 

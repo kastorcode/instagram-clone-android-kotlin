@@ -33,21 +33,12 @@
                     android:maxLines="1"
                     android:text="username"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/profile_options"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/options"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                 />
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <RelativeLayout
         android:id="@+id/profile_scroll_view"
@@ -113,6 +104,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/profile_followers_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -139,6 +131,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/profile_following_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -165,7 +158,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-
                     <Button
                         android:id="@+id/profile_edit_btn"
                         android:layout_width="170dp"
@@ -178,7 +170,6 @@
                     />
                 </LinearLayout>
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/profile_mid_bar"
@@ -207,7 +198,6 @@
                 />
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -219,7 +209,7 @@
                 <ImageButton
                     android:id="@+id/profile_uploaded_images_btn"
                     android:layout_width="1dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     style="?android:attr/buttonBarButtonStyle"
                     android:src="@drawable/grid"
@@ -228,7 +218,7 @@
                 <ImageButton
                     android:id="@+id/profile_saved_images_btn"
                     android:layout_width="1dp"
-                    android:layout_height="49dp"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
                     style="?android:attr/buttonBarButtonStyle"

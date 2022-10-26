@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.kastorcode.instagramclone.Models.Post
+import com.kastorcode.instagramclone.models.Post
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.squareup.picasso.Picasso

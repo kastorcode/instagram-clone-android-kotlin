@@ -4,7 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
-import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.models.Story
 import com.kastorcode.instagramclone.services.navigation.goToAddStoryActivity
 import com.kastorcode.instagramclone.services.navigation.goToStoryActivity
 

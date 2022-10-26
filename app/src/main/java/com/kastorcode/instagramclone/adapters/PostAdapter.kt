@@ -1,6 +1,5 @@
 package com.kastorcode.instagramclone.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
-import com.kastorcode.instagramclone.Models.Post
+import com.kastorcode.instagramclone.models.Post
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.media.copyTextToClipboard
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
@@ -69,7 +68,7 @@ class PostAdapter (
                 }
             }
             holder.postLikes.setOnClickListener {
-                goToShowUsersActivity(mContext as Activity, post.getPostId(), "", "Likes")
+                goToShowUsersActivity(mContext, post.getPostId(), "", "Likes")
             }
             holder.postPublisher.setOnClickListener {
                 goToProfileFragment(mContext, post.getPublisher())

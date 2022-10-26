@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.kastorcode.instagramclone.adapters.PostAdapter
 import com.kastorcode.instagramclone.adapters.StoryAdapter
-import com.kastorcode.instagramclone.Models.Post
-import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.models.Post
+import com.kastorcode.instagramclone.models.Story
 
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.post.getFollowingPosts

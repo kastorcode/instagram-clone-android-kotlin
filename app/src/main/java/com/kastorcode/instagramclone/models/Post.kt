@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Models
+package com.kastorcode.instagramclone.models
 
 
 class Post {
@@ -29,11 +29,6 @@ class Post {
     }
 
 
-    fun setPostImage (postImage : String) {
-        this.postImage = postImage
-    }
-
-
     fun getPublisher () : String {
         return publisher
     }
@@ -41,10 +36,5 @@ class Post {
 
     fun getDescription () : String {
         return description
-    }
-
-
-    fun setDescription (description : String) {
-        this.description = description
     }
 }

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Models.User
+import com.kastorcode.instagramclone.models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.navigation.goToMainActivity
 import com.kastorcode.instagramclone.services.navigation.goToProfileFragment

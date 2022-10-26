@@ -8,21 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.adapters.PostAdapter
-import com.kastorcode.instagramclone.Models.Post
+import com.kastorcode.instagramclone.models.Post
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.post.getPost
 
 
 class PostDetailsFragment : Fragment() {
 
     private lateinit var fragmentPostDetails : View
+    private lateinit var postId : String
     private lateinit var postList : MutableList<Post>
     private lateinit var postAdapter : PostAdapter
-    private lateinit var postId : String
 
 
     override fun onCreateView (
@@ -30,16 +27,14 @@ class PostDetailsFragment : Fragment() {
         savedInstanceState : Bundle?
     ) : View {
         setProps(inflater, container)
-        getPost()
+        getPost(postId, postList, postAdapter)
         return fragmentPostDetails
     }
 
 
     private fun setProps (inflater : LayoutInflater, container : ViewGroup?) {
-        val preferences = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
-        if (preferences != null) {
-            postId = preferences.getString("postId", "none")!!
-        }
+        val preferences = context!!.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
+        postId = preferences.getString("postId", "none")!!
         postList = ArrayList()
         postAdapter = PostAdapter(context!!, postList)
         fragmentPostDetails = inflater.inflate(R.layout.fragment_post_details, container, false)
@@ -48,22 +43,5 @@ class PostDetailsFragment : Fragment() {
         postDetailsRecyclerView.setHasFixedSize(true)
         postDetailsRecyclerView.layoutManager = linearLayoutManager
         postDetailsRecyclerView.adapter = postAdapter
-    }
-
-
-    private fun getPost () {
-        FirebaseDatabase.getInstance().reference.child("Posts").child(postId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (dataSnapshot : DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        postList.clear()
-                        val post = dataSnapshot.getValue(Post::class.java)
-                        postList.add(post!!)
-                        postAdapter.notifyDataSetChanged()
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {}
-            })
     }
 }

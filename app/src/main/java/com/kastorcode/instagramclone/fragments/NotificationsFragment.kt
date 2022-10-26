@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kastorcode.instagramclone.adapters.NotificationAdapter
-import com.kastorcode.instagramclone.Models.Notification
+import com.kastorcode.instagramclone.models.Notification
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.notification.deleteUserNotifications
 import com.kastorcode.instagramclone.services.notification.getNotifications

@@ -4,7 +4,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.kastorcode.instagramclone.Models.Story
+import com.kastorcode.instagramclone.models.Story
 
 
 fun getUserStories (

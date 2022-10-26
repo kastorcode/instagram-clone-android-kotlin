@@ -9,26 +9,22 @@ import com.kastorcode.instagramclone.models.Post
 import com.kastorcode.instagramclone.adapters.PostAdapter
 
 
-fun getFollowingPosts (
-    followingList : MutableList<String>, postList : MutableList<Post>, postAdapter : PostAdapter,
-    callback : (() -> Unit)? = null
+fun getPost (
+    postId : String, postList : MutableList<Post>, postAdapter : PostAdapter,
+    callback : ((post : Post) -> Unit)? = null
 ) {
-    FirebaseDatabase.getInstance().reference.child("Posts")
+    FirebaseDatabase.getInstance().reference.child("Posts").child(postId)
         .addValueEventListener(object : ValueEventListener {
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange (dataSnapshot : DataSnapshot) {
-                postList.clear()
-                for (snapshot in dataSnapshot.children) {
-                    val post = snapshot.getValue(Post::class.java)
-                    for (following in followingList) {
-                        if (post!!.getPublisher() == following) {
-                            postList.add(post)
-                        }
+                if (dataSnapshot.exists()) {
+                    val post = dataSnapshot.getValue(Post::class.java)
+                    postList.clear()
+                    postList.add(post!!)
+                    postAdapter.notifyDataSetChanged()
+                    if (callback != null) {
+                        callback(post)
                     }
-                }
-                postAdapter.notifyDataSetChanged()
-                if (callback != null) {
-                    callback()
                 }
             }
 
