@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.PostDetailsFragment"
+    tools:context=".fragments.PostDetailsFragment"
 >
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/post_details_app_bar_layout"

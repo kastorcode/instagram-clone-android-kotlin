@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.services.user
+package com.kastorcode.instagramclone.services.story
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -6,7 +6,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.Models.Story
-import com.kastorcode.instagramclone.services.story.deleteStory
 
 
 fun deleteUserStories (

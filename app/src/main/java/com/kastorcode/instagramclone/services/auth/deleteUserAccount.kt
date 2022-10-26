@@ -1,7 +1,14 @@
-package com.kastorcode.instagramclone.services.user
+package com.kastorcode.instagramclone.services.auth
 
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.kastorcode.instagramclone.services.notification.deleteUserNotifications
+import com.kastorcode.instagramclone.services.post.deleteUserComments
+import com.kastorcode.instagramclone.services.post.deleteUserLikes
+import com.kastorcode.instagramclone.services.post.deleteUserPosts
+import com.kastorcode.instagramclone.services.post.deleteUserSaves
+import com.kastorcode.instagramclone.services.story.deleteUserStories
+import com.kastorcode.instagramclone.services.user.*
 
 
 fun deleteUserAccount (

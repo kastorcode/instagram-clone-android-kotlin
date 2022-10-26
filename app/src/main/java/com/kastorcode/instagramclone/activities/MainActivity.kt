@@ -5,10 +5,10 @@ import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.kastorcode.instagramclone.Fragments.HomeFragment
-import com.kastorcode.instagramclone.Fragments.NotificationsFragment
-import com.kastorcode.instagramclone.Fragments.ProfileFragment
-import com.kastorcode.instagramclone.Fragments.SearchFragment
+import com.kastorcode.instagramclone.fragments.HomeFragment
+import com.kastorcode.instagramclone.fragments.NotificationsFragment
+import com.kastorcode.instagramclone.fragments.ProfileFragment
+import com.kastorcode.instagramclone.fragments.SearchFragment
 import com.kastorcode.instagramclone.R
 
 class MainActivity : AppCompatActivity() {

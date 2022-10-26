@@ -2,7 +2,7 @@ package com.kastorcode.instagramclone.services.navigation
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
-import com.kastorcode.instagramclone.Fragments.PostDetailsFragment
+import com.kastorcode.instagramclone.fragments.PostDetailsFragment
 import com.kastorcode.instagramclone.R
 
 

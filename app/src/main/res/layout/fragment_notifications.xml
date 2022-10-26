@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.NotificationsFragment"
+    tools:context=".fragments.NotificationsFragment"
 >
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/notifications_app_bar_layout"
@@ -33,6 +33,19 @@
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
                     android:text="Notifications"
+                />
+
+                <TextView
+                    android:id="@+id/notifications_clean_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/black"
+                    android:text="Clean"
                 />
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>

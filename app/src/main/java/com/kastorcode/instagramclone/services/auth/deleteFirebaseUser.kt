@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.services.user
+package com.kastorcode.instagramclone.services.auth
 
 import com.google.firebase.auth.FirebaseAuth
 

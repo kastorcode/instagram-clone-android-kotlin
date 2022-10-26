@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Fragments
+package com.kastorcode.instagramclone.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,15 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.kastorcode.instagramclone.adapters.NotificationAdapter
 import com.kastorcode.instagramclone.Models.Notification
-
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.notification.deleteUserNotifications
+import com.kastorcode.instagramclone.services.notification.getNotifications
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlin.collections.ArrayList
 
 
@@ -30,7 +27,8 @@ class NotificationsFragment : Fragment() {
         inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?
     ) : View {
         setProps(inflater, container)
-        getNotifications()
+        getNotifications(notificationList, notificationAdapter)
+        setClickListeners()
         return fragmentNotificationsView
     }
 
@@ -46,22 +44,9 @@ class NotificationsFragment : Fragment() {
     }
 
 
-    private fun getNotifications () {
-        FirebaseDatabase.getInstance().reference.child("Notifications")
-            .child(FirebaseAuth.getInstance().currentUser!!.uid).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange (dataSnapshot : DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        notificationList.clear()
-                        for (snapshot in dataSnapshot.children) {
-                            val notification = snapshot.getValue(Notification::class.java)
-                            notificationList.add(notification!!)
-                        }
-                        notificationList.reverse()
-                        notificationAdapter.notifyDataSetChanged()
-                    }
-                }
-
-                override fun onCancelled (error : DatabaseError) {}
-            })
+    private fun setClickListeners () {
+        notifications_clean_btn.setOnClickListener {
+            deleteUserNotifications()
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Fragments
+package com.kastorcode.instagramclone.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -18,7 +18,6 @@ import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.Models.User
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.user.followUser
-import com.kastorcode.instagramclone.services.user.unfollowUser
 import com.kastorcode.instagramclone.activities.ShowUsersActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -276,11 +275,12 @@ class ProfileFragment : Fragment() {
 
     private fun setClickListeners () {
         fun handleEditProfileBtnClick () {
-            when (fragmentProfileView.profile_edit_btn.text) {
-                "Edit Profile" -> startActivity(Intent(
+            if (fragmentProfileView.profile_edit_btn.text == "Edit Profile") {
+                startActivity(Intent(
                     context, AccountSettingsActivity::class.java))
-                "Follow" -> followUser(profileId)
-                "Following" -> unfollowUser(profileId)
+            }
+            else {
+                followUser(profileId, fragmentProfileView.profile_edit_btn.text.toString())
             }
         }
         fun goToShowUsersActivity (title : String) {

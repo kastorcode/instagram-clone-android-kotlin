@@ -1,4 +1,4 @@
-package com.kastorcode.instagramclone.Fragments
+package com.kastorcode.instagramclone.fragments
 
 import android.content.Context
 import android.os.Bundle

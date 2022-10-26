@@ -23,9 +23,9 @@
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_story.xml" value="0.19947916666666668" />
         <entry key="app/src/main/res/layout/add_story_item.xml" value="0.19947916666666668" />
-        <entry key="app/src/main/res/layout/comments_item_layout.xml" value="1.0" />
+        <entry key="app/src/main/res/layout/comments_item_layout.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.24521072796934865" />
         <entry key="app/src/main/res/layout/fragment_post_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.2" />

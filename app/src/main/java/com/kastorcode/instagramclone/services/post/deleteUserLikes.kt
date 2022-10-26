@@ -1,22 +1,23 @@
-package com.kastorcode.instagramclone.services.user
+package com.kastorcode.instagramclone.services.post
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.kastorcode.instagramclone.Models.Comment
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
-fun deleteUserComments (
+fun deleteUserLikes (
     callback : (() -> Unit)? = null, errorCallback : ((exception : Exception) -> Unit)? = null
 ) {
     var wasSuccessful = true
     val firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
-    FirebaseDatabase.getInstance().reference.child("Comments").addValueEventListener(object : ValueEventListener {
+    FirebaseDatabase.getInstance().reference.child("Likes").addValueEventListener(object : ValueEventListener {
         override fun onDataChange (dataSnapshot : DataSnapshot) {
             for (snapshot in dataSnapshot.children) {
                 if (!wasSuccessful) { break }
                 for (child in snapshot.children) {
-                    val comment = child.getValue(Comment::class.java)
-                    if (comment!!.getPublisher() == firebaseUserUid) {
+                    if (child.key == firebaseUserUid) {
                         child.ref.removeValue().addOnCompleteListener { task ->
                             if (!task.isSuccessful) {
                                 wasSuccessful = false

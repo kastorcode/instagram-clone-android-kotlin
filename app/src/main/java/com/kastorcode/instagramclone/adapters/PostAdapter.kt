@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.kastorcode.instagramclone.Models.Post
 import com.kastorcode.instagramclone.R
+import com.kastorcode.instagramclone.services.media.copyTextToClipboard
 import com.kastorcode.instagramclone.services.navigation.goToPostDetailsFragment
 import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
 import com.kastorcode.instagramclone.services.navigation.goToPostCommentsActivity
@@ -38,6 +39,9 @@ class PostAdapter (
         val post = mPost[position]
         fun setClickListeners () {
             holder.postProfileImage.setOnClickListener {
+                goToProfileFragment(mContext, post.getPublisher())
+            }
+            holder.postUsername.setOnClickListener {
                 goToProfileFragment(mContext, post.getPublisher())
             }
             holder.postImageView.setOnClickListener {
@@ -69,6 +73,12 @@ class PostAdapter (
             }
             holder.postPublisher.setOnClickListener {
                 goToProfileFragment(mContext, post.getPublisher())
+            }
+            holder.postDescription.setOnClickListener {
+                copyTextToClipboard(mContext, post.getDescription())
+            }
+            holder.postComments.setOnClickListener {
+                goToPostCommentsActivity(mContext, post.getPublisher(), post.getPostId())
             }
         }
         Picasso.get().load(post.getPostImage()).into(holder.postImageView)
