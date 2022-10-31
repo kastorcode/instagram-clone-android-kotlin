@@ -1,6 +1,7 @@
 package com.kastorcode.instagramclone.services.story
 
 import android.annotation.SuppressLint
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -15,6 +16,7 @@ fun getFollowingStories (
     callback : (() -> Unit)? = null
 ) {
     storyList.clear()
+    storyList.add(Story(FirebaseAuth.getInstance().currentUser!!.uid, "", "", 0, 0))
     val timeCurrent = System.currentTimeMillis()
     for (id in followingList) {
         FirebaseDatabase.getInstance().reference.child("Stories").child(id)

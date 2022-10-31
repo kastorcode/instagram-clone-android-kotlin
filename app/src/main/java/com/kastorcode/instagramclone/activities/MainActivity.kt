@@ -11,7 +11,11 @@ import com.kastorcode.instagramclone.fragments.ProfileFragment
 import com.kastorcode.instagramclone.fragments.SearchFragment
 import com.kastorcode.instagramclone.R
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var lastFragment : Fragment
+
 
     override fun onCreate (savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +56,14 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun moveToFragment (fragment : Fragment) {
+        lastFragment = fragment
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, fragment)
         fragmentTransaction.commit()
+    }
+
+
+    override fun onBackPressed () {
+        moveToFragment(lastFragment)
     }
 }

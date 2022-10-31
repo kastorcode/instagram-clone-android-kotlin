@@ -5,7 +5,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize"
 >
     <fragment
         android:id="@+id/nav_host_fragment"
@@ -36,5 +35,4 @@
         app:labelVisibilityMode="unlabeled"
         android:layout_alignParentBottom="true"
     />
-
 </RelativeLayout>

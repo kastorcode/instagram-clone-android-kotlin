@@ -21,17 +21,17 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="12dp"
     >
+
         <Button
             android:id="@+id/delete_account_cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAllCaps="true"
-            android:textSize="17sp"
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimary"
+            android:padding="10dp"
             android:text="Cancel"
-        />
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
     </RelativeLayout>
 
     <RelativeLayout

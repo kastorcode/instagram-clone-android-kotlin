@@ -12,7 +12,22 @@ fun deleteUserPosts (
     callback : (() -> Unit)? = null, errorCallback : ((exception : Exception) -> Unit)? = null
 ) {
     var wasSuccessful = true
+
+    fun success () {
+        if (wasSuccessful && callback != null) {
+            callback()
+        }
+    }
+
+    fun failure (exception : Exception) {
+        wasSuccessful = false
+        if (errorCallback != null) {
+            errorCallback(exception)
+        }
+    }
+
     val firebaseUserUid = FirebaseAuth.getInstance().currentUser!!.uid
+
     FirebaseDatabase.getInstance().reference.child("Posts")
         .addValueEventListener(object : ValueEventListener {
             override fun onDataChange (dataSnapshot : DataSnapshot) {
@@ -20,64 +35,11 @@ fun deleteUserPosts (
                     if (!wasSuccessful) { break }
                     val post = snapshot.getValue(Post::class.java)
                     if (post!!.getPublisher() == firebaseUserUid) {
-                        deletePostImage(
-                            post.getPostImage(),
-                            {
-                                deletePostComments(
-                                    post.getPostId(),
-                                    {
-                                        deletePostLikes(
-                                            post.getPostId(),
-                                            {
-                                                deletePostSaves(
-                                                    post.getPostId(),
-                                                    {
-                                                        deletePost(
-                                                            snapshot.ref,
-                                                            null
-                                                        ) { exception ->
-                                                            wasSuccessful = false
-                                                            if (errorCallback != null) {
-                                                                errorCallback(exception)
-                                                            }
-                                                        }
-                                                    },
-                                                    { exception ->
-                                                        wasSuccessful = false
-                                                        if (errorCallback != null) {
-                                                            errorCallback(exception)
-                                                        }
-                                                    }
-                                                )
-                                            },
-                                            { exception ->
-                                                wasSuccessful = false
-                                                if (errorCallback != null) {
-                                                    errorCallback(exception)
-                                                }
-                                            }
-                                        )
-                                    },
-                                    { exception ->
-                                        wasSuccessful = false
-                                        if (errorCallback != null) {
-                                            errorCallback(exception)
-                                        }
-                                    }
-                                )
-                            },
-                            { exception ->
-                                wasSuccessful = false
-                                if (errorCallback != null) {
-                                    errorCallback(exception)
-                                }
-                            }
-                        )
+                        deletePost(post, snapshot.ref, null
+                        ) { exception -> failure(exception) }
                     }
                 }
-                if (wasSuccessful && callback != null) {
-                    callback()
-                }
+                success()
             }
 
             override fun onCancelled (error : DatabaseError) {}

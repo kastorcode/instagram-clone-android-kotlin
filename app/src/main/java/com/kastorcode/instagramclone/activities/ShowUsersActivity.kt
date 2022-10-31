@@ -56,7 +56,6 @@ class ShowUsersActivity : AppCompatActivity() {
         }
         fun setShowUsersRecyclerView () {
             val showUsersRecyclerView = findViewById<RecyclerView>(R.id.show_users_recycler_view)
-            showUsersRecyclerView.setHasFixedSize(true)
             showUsersRecyclerView.layoutManager = LinearLayoutManager(this)
             showUsersRecyclerView.adapter = userAdapter
         }

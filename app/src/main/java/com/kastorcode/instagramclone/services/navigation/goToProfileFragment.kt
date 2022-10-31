@@ -6,9 +6,9 @@ import com.kastorcode.instagramclone.fragments.ProfileFragment
 import com.kastorcode.instagramclone.R
 
 
-fun goToProfileFragment (mContext : Context, profileId : String) {
-    mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+fun goToProfileFragment (context : Context, profileId : String) {
+    context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
         .putString("profileId", profileId).apply()
-    (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+    (context as FragmentActivity).supportFragmentManager.beginTransaction()
         .replace(R.id.fragment_container, ProfileFragment()).commit()
 }

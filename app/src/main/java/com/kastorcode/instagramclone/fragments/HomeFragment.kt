@@ -52,16 +52,13 @@ class HomeFragment : Fragment() {
         postList = ArrayList()
         postAdapter = PostAdapter(context!!, postList)
         storyList = ArrayList()
-        storyList.add(Story(firebaseUserUid, "", "", 0, 0))
         storyAdapter = StoryAdapter(context!!, storyList)
     }
 
 
     private fun setHomeStoryView () {
         val homeStoryView = fragmentHomeView.findViewById<RecyclerView>(R.id.home_story_view)
-        homeStoryView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeStoryView.layoutManager = linearLayoutManager
+        homeStoryView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeStoryView.adapter = storyAdapter
     }
 

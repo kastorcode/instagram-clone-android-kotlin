@@ -16,8 +16,7 @@
             android:id="@+id/post_details_toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginVertical="4dp"
-            android:layout_marginHorizontal="4dp"
+            android:layout_margin="4dp"
             android:background="@android:color/white"
         >
             <RelativeLayout
@@ -38,11 +37,34 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/post_details_recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:layout_below="@+id/post_details_app_bar_layout"
-    />
+        android:layout_margin="5dp"
+    >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/post_details_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+        />
+
+        <Button
+            android:id="@+id/post_details_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/post_details_recycler_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="20dp"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="7.5dp"
+            android:background="@color/colorPrimary"
+            android:textAllCaps="true"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:text="Delete"
+            android:visibility="gone"
+        />
+    </RelativeLayout>
 </RelativeLayout>

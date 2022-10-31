@@ -16,7 +16,6 @@ fun getUser (userId : String, callback : ((user : User) -> Unit)) {
                 }
             }
 
-            override fun onCancelled (error : DatabaseError) {
-            }
+            override fun onCancelled (error : DatabaseError) {}
         })
 }

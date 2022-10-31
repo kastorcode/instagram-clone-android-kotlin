@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kastorcode.instagramclone.models.Comment
 import com.kastorcode.instagramclone.R
 import com.kastorcode.instagramclone.services.media.copyTextToClipboard
-import com.kastorcode.instagramclone.services.navigation.goToProfileFragment
 import com.kastorcode.instagramclone.services.user.getUser
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -30,12 +29,6 @@ class CommentsAdapter (
     override fun onBindViewHolder (holder : ViewHolder, position : Int) {
         val comment = mComments[position]
         fun setClickListeners () {
-            holder.commentsProfileImage.setOnClickListener {
-                goToProfileFragment(mContext, comment.getPublisher())
-            }
-            holder.commentsUsername.setOnClickListener {
-                goToProfileFragment(mContext, comment.getPublisher())
-            }
             holder.commentsComment.setOnClickListener {
                 copyTextToClipboard(mContext, comment.getComment())
             }
